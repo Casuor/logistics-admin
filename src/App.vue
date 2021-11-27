@@ -48,7 +48,7 @@ export default {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background:#ef9c2a;
+  background:#e032ee;
   cursor: pointer;
 }
 

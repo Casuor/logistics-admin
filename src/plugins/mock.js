@@ -126,3 +126,50 @@ Mock.mock('/main/menus', 'get', () => {
     }
     return result
 })
+
+
+
+
+//mock INIT MENU TABLE
+
+Mock.mock('/main/menuList', 'get', () => {
+
+    result.data = [
+        {
+            id: 1,
+            name: '测试',
+            authority: '测试',
+            icon: '测试',
+            url: '/main/menu',
+            component: '/main/menu',
+            type: 0,
+            status: 0,
+            sort: 1
+        },
+        {
+            id: 2,
+            name: '测试',
+            authority: '测试',
+            icon: '测试',
+            url: '/main/menu',
+            component: '/main/menu',
+            type: 0,
+            status: 0,
+            sort: 1,
+            children: [
+                {
+                    id: 21,
+                    name: '测试',
+                    authority: '测试',
+                    icon: '测试',
+                    url: '/main/menu',
+                    component: '/main/menu',
+                    type: 0,
+                    status: 0,
+                    sort: 1
+                },
+            ]
+        }
+    ]
+    return result
+})
