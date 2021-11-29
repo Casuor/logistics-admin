@@ -71,17 +71,17 @@
           prop="operate"
           label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" @click="dialogFormVisible = true">编辑</el-button>
+          <el-button type="text" @click="editForm(scope.row.id)">编辑</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="confirmToDelete">删除</el-button>
+          <el-button type="text" @click="confirmToDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--    end table-->
 
     <!--    start dialog-->
-    <el-dialog title="新增菜单" :visible.sync="dialogFormVisible">
-      <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px" class="demo-addForm">
+    <el-dialog title="新增菜单" :visible.sync="dialogFormVisible" :before-close="handleClose">
+      <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px">
         <el-form-item label="上级菜单" prop="parentId">
           <el-select v-model="addForm.parentId" placeholder="请选择上级菜单">
             <template v-for="item in tableData">
@@ -142,7 +142,7 @@
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('addForm')">立即创建</el-button>
+        <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
       </div>
     </el-dialog>
     <!--    end dialog-->
@@ -195,7 +195,18 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          //提交成功
+          this.$axios.post('/menuList/add' + (this.addForm.id ? 'edit' : 'add'), this.addForm).then(() => {
+            this.$message({
+              message: '添加成功！！！',
+              type: 'success',
+              onClose: () => {
+                //更新表中数据
+                this.initTables();
+              }
+            });
+          })
+          //添加成功后隐藏dialogForm
           this.dialogFormVisible = false;
         } else {
           console.log('error submit!!');
@@ -203,15 +214,28 @@ export default {
         }
       });
     },
+    handleClose(done) {
+      this.resetForm('editForm');
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.dialogFormVisible = false;
+      this.addForm = {};
+    }
+    ,
     handleChange(value) {
       console.log(value);
     },
-    confirmToDelete() {
+    confirmToDelete(id) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        //发起del请求
+        this.$axios.post('/main/menuList/del' + id).then((res) => {
+          this.initTables();
+        })
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -227,6 +251,13 @@ export default {
       this.$axios.get('/main/menuList').then(res => {
         this.tableData = res.data.data;
       })
+    },
+    editForm(id) {
+      this.$axios.get('/main/menuList/edit' + id).then(res => {
+        this.addForm = res.data.data;
+      })
+      this.dialogFormVisible = true
+      // this.initTables();
     }
   },
   created() {
