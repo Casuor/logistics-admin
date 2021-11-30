@@ -31,7 +31,9 @@
             <el-menu-item index="2" @click="addTab(item)">
               <router-link :to="item.path">订单管理</router-link>
             </el-menu-item>
-            <el-menu-item index="3">处理中心</el-menu-item>
+            <el-menu-item index="3" @click="addTab({title: '订单记录', name: 'history'})">
+              <router-link to="/main/history">订单记录</router-link>
+            </el-menu-item>
           </el-menu>
         </div>
       </el-col>

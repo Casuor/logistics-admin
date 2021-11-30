@@ -72,7 +72,7 @@ export default {
 }
 
 .el-main {
-  color: red;
+  /*color: red;*/
   /*text-align: center;*/
   padding: 0;
 }

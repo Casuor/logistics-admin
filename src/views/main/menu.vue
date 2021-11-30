@@ -15,6 +15,7 @@
         row-key="id"
         border
         stripe
+        :header-cell-style="{background:'#f8f8f9',color:'#282a36'}"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column
           prop="name"
@@ -138,8 +139,6 @@
           </template>
         </el-form-item>
       </el-form>
-
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
