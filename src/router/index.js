@@ -51,14 +51,19 @@ const routes = [
                 path: '/main/settings',
                 name: 'Settings',
                 component: () => import('../views/settings')
-            }
+            },
+            {
+                path: '/main/history',
+                name: 'history',
+                component: () => import('../views/main/history')
+            },
         ]
     },
     {
         path: '/login',
         name: 'login',
         component: () => import('../views/login')
-    }
+    },
 ]
 
 const router = new VueRouter({
