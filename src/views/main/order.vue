@@ -16,6 +16,15 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="订单状态：" prop="name">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户姓名：" prop="name">
+          <el-input></el-input>
+        </el-form-item>
+        <el-form-item label="产品名称：" prop="name">
           <el-input></el-input>
         </el-form-item>
         <el-form-item>
@@ -68,16 +77,16 @@
           width="150"
           label="产品数量">
       </el-table-column>
-        <el-table-column
-            prop="phoneNumber"
-            width="150"
-            label="运费">
+      <el-table-column
+          prop="phoneNumber"
+          width="150"
+          label="运费">
       </el-table-column>
-        <el-table-column
-            prop="phoneNumber"
-            width="150"
-            label="发货平台">
-        </el-table-column>
+      <el-table-column
+          prop="phoneNumber"
+          width="150"
+          label="发货平台">
+      </el-table-column>
       <el-table-column
           prop="signDate"
           width="150"
@@ -90,11 +99,11 @@
           sortable
           label="下单时间">
       </el-table-column>
-        <el-table-column
-            prop="signDate"
-            width="150"
-            sortable
-            label="订单编号">
+      <el-table-column
+          prop="signDate"
+          width="150"
+          sortable
+          label="订单编号">
       </el-table-column>
       <el-table-column
           prop="operate"
@@ -124,6 +133,16 @@ export default {
       formInline: {
         user: '',
         region: ''
+      },
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
       },
       pickerOptions: {
         shortcuts: [{

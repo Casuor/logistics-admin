@@ -84,7 +84,7 @@
       </el-table>
     </el-drawer>
     <el-dialog title="订单状态" :visible.sync="orderStatusVisible">
-      <el-steps align-center :active="1" finish-status="success"  style="margin-top: 20px">
+      <el-steps align-center :active="1" finish-status="success" style="margin-top: 20px">
         <el-step title="下单成功" description="这是一段很长很长很长的描述性文字"></el-step>
         <el-step title="已发货" description="这是一段很长很长很长的描述性文字"></el-step>
       </el-steps>
