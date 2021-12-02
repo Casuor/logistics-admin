@@ -31,13 +31,94 @@
     <el-card shadow="never" class="main-card">
       <i class="el-icon-document">数据列表</i>
     </el-card>
+
+    <!--    start table-->
+    <el-table
+        class="main-table"
+        ref="multipleTable"
+        :data="tableData"
+        tooltip-effect="dark"
+        style="width: 100%"
+        stripe
+        :border="true"
+        :header-cell-style="{background:'#f8f8f9',color:'#282a36'}"
+        :default-sort="{prop: 'signDate', order: 'descending'}"
+        @selection-change="handleSelectionChange"
+        @row-click="handleCurrentChange">
+      <el-table-column
+          type="selection">
+      </el-table-column>
+      <el-table-column
+          prop="userName"
+          width="150"
+          label="招商平台">
+      </el-table-column>
+      <el-table-column
+          prop="userRole"
+          width="150"
+          label="用户姓名">
+      </el-table-column>
+      <el-table-column
+          prop="phoneNumber"
+          width="150"
+          label="产品名称">
+      </el-table-column>
+      <el-table-column
+          prop="phoneNumber"
+          width="150"
+          label="产品数量">
+      </el-table-column>
+        <el-table-column
+            prop="phoneNumber"
+            width="150"
+            label="运费">
+      </el-table-column>
+        <el-table-column
+            prop="phoneNumber"
+            width="150"
+            label="发货平台">
+        </el-table-column>
+      <el-table-column
+          prop="signDate"
+          width="150"
+          sortable
+          label="订单创建时间">
+      </el-table-column>
+      <el-table-column
+          prop="signDate"
+          width="150"
+          sortable
+          label="下单时间">
+      </el-table-column>
+        <el-table-column
+            prop="signDate"
+            width="150"
+            sortable
+            label="订单编号">
+      </el-table-column>
+      <el-table-column
+          prop="operate"
+          fixed="right"
+          label="操作">
+        <template slot-scope="scope">
+          <el-button type="text" @click="assignRole(scope.row.userId)">分配角色</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text" @click="resetPwd(scope.row.userId)">修改密码</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text" @click="editUserInfo(scope.row.userId)">编辑</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-button type="text" @click="confirmToDelete(scope.row.userId)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!--    end table-->
   </div>
 </template>
 
 
 <script>
 export default {
-  name: "purchase",
+  name: "order",
   data() {
     return {
       formInline: {
@@ -83,6 +164,9 @@ export default {
 .main-card {
   margin-top: 25px;
   width: 100%;
+}
 
+.main-table {
+  margin-top: 25px;
 }
 </style>

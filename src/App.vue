@@ -38,17 +38,17 @@ export default {
   width: 8px;
   height: 8px;
   background-color: #F1F6F7;
-  border-radius: 12px;
+  border-radius: 4px;
 }
 
 /*滚动条的滑块*/
 ::-webkit-scrollbar-thumb {
   background-color: #F1F6F7;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background:#e032ee;
+  background: #f9a825;
   cursor: pointer;
 }
 

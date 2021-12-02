@@ -103,11 +103,11 @@ Mock.mock('/main/menus', 'get', () => {
             component: "",
             children: [
                 {
-                    title: "信息管理",
-                    name: "info",
-                    icon: "el-icon-position",
-                    path: "/main/info",
-                    component: "info",
+                    title: "我要去下单",
+                    name: "placeOrder",
+                    icon: "el-icon-shopping-cart-full",
+                    path: "/main/placeOrder",
+                    component: "placeOrder",
                 },
                 {
                     title: "订单管理",
@@ -115,7 +115,13 @@ Mock.mock('/main/menus', 'get', () => {
                     icon: "el-icon-shopping-cart-full",
                     path: "/main/order",
                     component: "order",
-                }
+                }, {
+                    title: "信息管理",
+                    name: "info",
+                    icon: "el-icon-position",
+                    path: "/main/info",
+                    component: "info",
+                },
             ]
         }
     ]
@@ -126,8 +132,6 @@ Mock.mock('/main/menus', 'get', () => {
     }
     return result
 })
-
-
 
 
 //mock INIT MENU TABLE

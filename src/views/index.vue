@@ -1,6 +1,6 @@
 <template>
   <div class="main-page">
-
+    <h1>Index</h1>
   </div>
 </template>
 
@@ -18,11 +18,9 @@ export default {
 
 <style scoped>
 .main-page {
-  border: 1px solid #fddddd;
   width: 100%;
   height: 100%;
 }
-
 
 
 </style>
