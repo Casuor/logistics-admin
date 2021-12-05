@@ -1,32 +1,50 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
     <router-view/>
   </div>
 </template>
 
+<script>
+export default {
+  name: 'app',
+  watch: {
+    $route(to, from) {
+      if (to.path === "/main/menuInfo" || to.path === "/main/userInfo" || to.path === "/main/roleInfo" || to.path === "/main/products" || to.path === "/main/placeOrder" || to.path === "/main/orders" || to.path === "orderHistory") {
+        let title = to.meta.title
+        let name = to.name
+        this.$store.commit('addTab', {title: title, name: name})
+      }
+    }
+  }
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-#nav {
-  padding: 30px;
+/*滚动条样式*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #F1F6F7;
+  border-radius: 4px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+/*滚动条滑块样式*/
+::-webkit-scrollbar-thumb {
+  background-color: #F1F6F7;
+  border-radius: 4px;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+/*鼠标悬浮*/
+::-webkit-scrollbar-thumb:hover {
+  background: #f9a825;
 }
 </style>
