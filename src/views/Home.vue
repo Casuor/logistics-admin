@@ -5,7 +5,7 @@
       <el-header>
         <NavBar></NavBar>
       </el-header>
-      <el-main style="padding: 0;">
+      <el-main style="padding: 0;height: 100%;">
         <NavTab></NavTab>
         <div class="main-container">
           <router-view/>
@@ -44,7 +44,7 @@ export default {
   height: 100%;
 }
 
-.el-header, .el-footer {
+.el-header{
   background-color: #2d333b;
   color: #9da7b3;
   text-align: center;
@@ -53,10 +53,7 @@ export default {
 }
 
 .el-aside {
-  background-color: #22272e;
   color: #9da7b3;
-  text-align: center;
-  line-height: 200px;
 }
 
 .el-aside::-webkit-scrollbar {

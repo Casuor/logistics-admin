@@ -1,30 +1,29 @@
 <template>
   <div>
     <!--start button-->
-    <el-form :inline="true">
+    <el-form :inline="true" :model="editUserForm">
       <el-form-item>
-        <el-input
-            placeholder="请输入手机号码..."
-            v-model="searchForm.phoneNumber"
-            clearable>
-        </el-input>
+        <el-input placeholder="请输入手机号码..." v-model="editUserForm.phoneNumber" clearable></el-input>
       </el-form-item>
+
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="searchUser(searchForm.phoneNumber)">查找</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="searchUser(editUserForm.phoneNumber)">查找</el-button>
       </el-form-item>
+
       <el-form-item>
-        <el-select v-model="selItemVal" placeholder="用户状态" clearable @change="handleSelChange(selItemVal)">
-          <el-option
-              v-for="item in options"
-              :key="item.selItemVal"
-              :label="item.label"
-              :value="item.selItemVal">
+        <el-select v-model="editUserForm.roleStatus" placeholder="用户状态" clearable
+                   @change="handleSelChange('editUserForm.roleStatus')">
+          <el-option v-for="item in userStatusOpt" :key="item.selItemVal" :label="item.label" :value="item.selItemVal">
           </el-option>
         </el-select>
       </el-form-item>
+
       <el-divider direction="vertical"></el-divider>
       <el-form-item>
-        <el-button type="primary" @click="dialogFormVisibleOfInsert = true" icon="el-icon-circle-plus-outline">新增
+        <el-button type="primary"
+                   @click="dialogFormVisibleOfInsert = true"
+                   icon="el-icon-circle-plus-outline"
+                   v-if="hasPermission('system:userInfo:insert')">新增
         </el-button>
       </el-form-item>
       <el-form-item>
@@ -48,6 +47,7 @@
         style="width: 100%"
         stripe
         :border="true"
+        v-loading="loading"
         :header-cell-style="{background:'#f8f8f9',color:'#282a36'}"
         :default-sort="{prop: 'signDate', order: 'descending'}"
         @selection-change="handleSelectionChange"
@@ -91,8 +91,8 @@
                 v-model="scope.row.userStatus"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
-                active-value="启用"
-                inactive-value="关闭">
+                :active-value="activeValue"
+                :inactive-value="inactiveValue">
             </el-switch>
           </el-tooltip>
         </template>
@@ -132,12 +132,28 @@
           <el-input v-model="editUserForm.userName"></el-input>
         </el-form-item>
         <el-form-item label="用户权限" prop="userRole">
-          <el-input v-model="editUserForm.userRole"></el-input>
+          <el-select v-model="selItemVal" placeholder="请选择角色">
+            <el-option
+                v-for="item in roleInfo"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="手机号码" prop="phoneNumber">
           <el-input v-model="editUserForm.phoneNumber"></el-input>
         </el-form-item>
+        <el-form-item label="状态" prop="userStatus">
+          <el-radio-group v-model="editUserForm.userStatus">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="2">禁用</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
+      <!--    end addForm dialog-->
+
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleOfInsert = false">取 消</el-button>
         <el-button type="primary" @click="submitForm('addForm')">确认</el-button>
@@ -148,11 +164,11 @@
     <!--    start assignRole dialog-->
     <el-dialog title="分配角色" :visible.sync="dialogFormVisibleOfRole">
       <el-tree
-          :data="RoleData"
+          :data="roleInfo"
           show-checkbox
           default-expand-all
           node-key="id"
-          ref="tree"
+          ref="roleInfo"
           highlight-current>
       </el-tree>
       <div slot="footer" class="dialog-footer">
@@ -169,7 +185,7 @@
           <el-input v-model="resetPwdForm.pwd"></el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="pwd">
-          <el-input v-model="resetPwdForm.pwd"></el-input>
+          <el-input v-model="resetPwdForm.confirmPwd"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -186,7 +202,14 @@
           <el-input v-model="editUserForm.userName"></el-input>
         </el-form-item>
         <el-form-item label="用户权限" prop="userRole">
-          <el-input v-model="editUserForm.userRole"></el-input>
+          <el-select v-model="selItemVal" placeholder="请选择角色">
+            <el-option
+                v-for="item in roleInfo"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="手机号码" prop="phoneNumber">
           <el-input v-model="editUserForm.phoneNumber"></el-input>
@@ -213,6 +236,9 @@ export default {
       dialogFormVisibleOfRole: false,
       dialogFormVisibleOfResetPwd: false,
       dialogFormVisibleOfEditForm: false,
+      loading: false,
+      activeValue: "启用",
+      inactiveValue: "禁用",
       //start export excel
       downloadLoading: false,
       autoWidth: true,
@@ -223,29 +249,13 @@ export default {
       selItemVal: '',
       selectRow: [],
       currentPage: 1,
-      pageSize: 20,
+      pageSize: 10,
       totalPages: 200,
-      searchForm: {
-        phoneNumber: '',
-      },
       resetPwdForm: {
-        pwd: '123'
+        pwd: '123',
+        confirmPwd: '123'
       },
-      editUserForm: {
-        userName: '李大宝',
-        phoneNumber: '110',
-        userRole: '超级管理员',
-        signDate: '2021-11-30',
-        userStatus: '启用'
-      },
-      resetPwdFormRules: {
-        pwd: [
-          {required: true, message: '请输入密码，长度为 3 到 6 个的数字', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度为 3 到 6 个的数字', trigger: 'blur'}
-        ]
-      },
-      editUserFormRules: {},
-      options: [
+      userStatusOpt: [
         {
           selItemVal: 'normal',
           label: '正常'
@@ -255,45 +265,52 @@ export default {
           label: '禁用'
         }
       ],
-      tableData: [
-        {
-          userId: '121123',
-          userName: '李大宝',
-          phoneNumber: '110',
-          userRole: '超级管理员',
-          signDate: '2021-11-30',
-          userStatus: '启用'
-        },
-        {
-          userId: '121123',
-          userName: '李大宝',
-          phoneNumber: '110',
-          userRole: '超级管理员',
-          signDate: '2021-11-30',
-          userStatus: '启用'
-        },
-        {
-          userId: '121123',
-          userName: '李大宝',
-          phoneNumber: '110',
-          userRole: '超级管理员',
-          signDate: '2021-11-30',
-          userStatus: '启用'
-        }
-      ],
-      RoleData: [
+      roleInfo: [
         {
           id: 1,
-          label: '超级管理员',
+          selItemVal: 'admin',
+          label: '管理员'
         },
         {
           id: 2,
-          label: '管理员',
+          selItemVal: 'generalUser',
+          label: '普通用户'
         }
-      ]
+      ],
+      tableData: [],
+      editUserForm: {
+        userName: '',
+        phoneNumber: '',
+        userRole: '',
+        userStatus: ''
+      },
+      editUserFormRules: {
+        userName: [
+          {required: true, message: '请输入用户名，长度为 3 到 6 个字符', trigger: 'blur'},
+          {min: 3, max: 6, message: '长度为 3 到 6 个字符', trigger: 'blur'}
+        ],
+        phoneNumber: [
+          {required: true, message: '请输入用户名，长度为 3 到 6 个字符', trigger: 'blur'},
+          {min: 3, max: 6, message: '长度为 3 到 6 个字符', trigger: 'blur'}
+        ]
+      },
+      resetPwdFormRules: {
+        pwd: [
+          {required: true, message: '请输入密码，长度为 3 到 6 个的数字', trigger: 'blur'},
+          {min: 3, max: 6, message: '长度为 3 到 6 个的数字', trigger: 'blur'}
+        ]
+      },
     }
   },
   methods: {
+    initUserInfo() {
+      this.$axios.get('/system/userInfo/init').then((res) => {
+        this.loading = true;
+        console.log(res.data.data);
+        this.tableData = res.data.data;
+        this.loading = false;
+      })
+    },
     searchUser() {
 
     },
@@ -332,7 +349,27 @@ export default {
     },
     //根据用户状态筛选
     handleSelChange(value) {
-      console.log(value);
+      console.log("用户状态：", value);
+      if (value === "normal") {
+        console.log(this.tableData)
+        let selectNormal = []
+        this.tableData.forEach(el => {
+          console.log("执行了")
+          if (el.userStatus === "启用") {
+            selectNormal.push(el)
+          }
+          this.tableData = selectNormal
+        })
+      } else if (value === "disable") {
+        let selectDisable = []
+        this.tableData.forEach(el => {
+          console.log("执行了")
+          if (el.userStatus === "禁用") {
+            selectDisable.push(el)
+          }
+          this.tableData = selectDisable
+        })
+      }
     },
     handleSelectionChange(val) {
       this.selectRow = val
@@ -377,6 +414,7 @@ export default {
     }
   },
   created() {
+    this.initUserInfo()
   }
 }
 </script>

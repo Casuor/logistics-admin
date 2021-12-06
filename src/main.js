@@ -5,7 +5,7 @@ import store from './store'
 import axios from "./plugins/axios";
 import './plugins/element.js'
 import Router from "vue-router";
-
+import hasPermission from './common/accessControl'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {

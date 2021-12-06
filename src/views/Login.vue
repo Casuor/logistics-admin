@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="login">
     <el-row type="flex" justify="center">
-      <el-col :xl="6" :lg="7">
+      <el-col :xl="6" :lg="7" style="margin-right: 10px">
         <h2>华寿物流管理</h2>
-        <el-image :src="require('@/assets/logo.png')" style="height: 180px;width: 180px;"></el-image>
+        <el-image :src="require('@/assets/login.svg')" style="height: 200px;width: 200px;"></el-image>
         <h5>作者：aki</h5>
       </el-col>
       <el-col :span="1">
@@ -94,8 +94,24 @@ export default {
 </script>
 
 <style scoped>
+.login {
+  background-image: url('../assets/bg.png');
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 1000px;
+  /*z-index: -10;*/
+  zoom: 1;
+  background-color: #fff;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -o-background-size: cover;
+  background-position: center 0;
+}
+
 .el-row {
-  margin-top: 150px;
   height: 100%;
   display: flex;
   align-items: center;
@@ -111,3 +127,4 @@ export default {
   height: 300px;
 }
 </style>
+

@@ -141,7 +141,12 @@ Mock.mock('/system/sideNavigation', 'get', () => {
             ]
         }
     ]
-    let authority = []
+    let authority = [
+        "system:userInfo:insert",
+        "system:menuInfo:insert",
+        "system:roleInfo:insert",
+        "product:product:insert",
+    ]
     result.data = {
         menus: menus,
         authority: authority
@@ -189,6 +194,131 @@ Mock.mock('/main/menuList', 'get', () => {
                     sort: 1
                 },
             ]
+        }
+    ]
+    return result
+})
+
+Mock.mock('/system/userInfo/init', 'get', () => {
+    result.data = [
+        {
+            userId: '1',
+            userName: '李大宝',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '2',
+            userName: '秦明',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '3',
+            userName: '林涛',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '禁用'
+        },
+        {
+            userId: '1',
+            userName: '李大宝',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '2',
+            userName: '秦明',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '3',
+            userName: '林涛',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '禁用'
+        }, {
+            userId: '1',
+            userName: '李大宝',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '2',
+            userName: '秦明',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '3',
+            userName: '林涛',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '禁用'
+        },
+        {
+            userId: '1',
+            userName: '李大宝',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '2',
+            userName: '秦明',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '启用'
+        },
+        {
+            userId: '3',
+            userName: '林涛',
+            phoneNumber: '110',
+            userRole: '超级管理员',
+            signDate: '2021-11-30',
+            userStatus: '禁用'
+        }
+    ]
+    return result
+})
+
+Mock.mock('/system/roleInfo/init', 'get', () => {
+    result.data = [
+        {
+            roleName: '李大宝',
+            roleId: 'admin',
+            roleStatus: '启用',
+            roleDescription: '超级管理员，拥有最高权限',
+        },
+        {
+            roleName: '秦明',
+            roleId: 'admin',
+            roleStatus: '启用',
+            roleDescription: '超级管理员，拥有最高权限',
+        },
+        {
+            roleName: '林涛',
+            roleId: 'generalUser',
+            roleStatus: '启用',
+            roleDescription: '普通用户',
         }
     ]
     return result
