@@ -1,0 +1,20 @@
+server:
+  port: 8090
+  # DataSource Config
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dblogistics?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password:
+  security:
+    user:
+      name: admin  # 用户名
+      password: 123456  # 密码
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+aki:
+  jwt:
+    header:Authorization
+    expire:604800
+    secret:kd78dada9d7a0sd102e970asc92psxff
