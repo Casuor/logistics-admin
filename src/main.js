@@ -5,7 +5,7 @@ import store from './store'
 import axios from "./plugins/axios";
 import './plugins/element.js'
 import Router from "vue-router";
-import hasPermission from './common/accessControl'
+// import hasPermission from './common/accessControl'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -14,7 +14,7 @@ Router.prototype.push = function push(location) {
 
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
-require('./utils/mock')
+// require('./utils/mock')
 
 new Vue({
     router,

@@ -20,7 +20,8 @@
           <el-form-item label="验证码" prop="code">
             <el-input v-model="loginForm.code" style="width: 170px;float: left;" placeholder="请输入验证码"></el-input>
             <el-image :src="codeImage"
-                      style="width: 70px;padding-left: 5px;float: left;border-radius: 4px;height: 40px;"></el-image>
+                      style="width: 75px;padding-left: 5px;float: left;border-radius: 4px;height: 40px;"
+                      @click="getCodeImage"></el-image>
           </el-form-item>
           <el-form-item>
             <el-button plain type="primary" @click="registerForm('loginForm')" style="margin-left: 6px;">注册</el-button>
@@ -33,6 +34,8 @@
 </template>
 
 <script>
+import qs from "qs";
+
 export default {
   name: "Login",
   data() {
@@ -62,8 +65,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/login', this.loginForm).then(res => {
-            console.log(res)
+          this.$axios.post('/login?' + qs.stringify(this.loginForm)).then(res => {
+            console.log("登录提交了！", res)
             const jwt = res.headers['Authorization']
             console.log('JWT:', jwt)
             this.$store.commit('SET_TOKEN', jwt)
@@ -79,11 +82,12 @@ export default {
       this.$refs[formName].register();
     },
     getCodeImage() {
-      this.$axios.get('/checkCode').then(res => {
-        console.log('/checkCode');
+      this.$axios.get('/captcha').then(res => {
+        console.log('/captcha');
         console.log(res);
         this.loginForm.token = res.data.data.token;
         this.codeImage = res.data.data.codeImage;
+        this.loginForm.code = "";
       });
     }
   },

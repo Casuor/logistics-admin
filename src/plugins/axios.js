@@ -2,7 +2,7 @@ import axios from "axios";
 import Element from "element-ui";
 import router from "../router/index";
 
-// axios.defaults.baseURL = "http://localhost:8081"
+axios.defaults.baseURL = "http://localhost:8090"
 const request = axios.create({
     timeout: 5000, headers: {
         'Content-type': "application/json;charset=utf-8"
@@ -20,20 +20,19 @@ request.interceptors.response.use(response => {
     if (res.statusCode === 200) {
         return response
     } else {
-        Element.Message.error(res.msg ? "系统错误！" : res.msg)
-        return Promise.reject(response.data.msg)
+        Element.Message.error(!res.message ? "系统错误！" : res.message)
+        return Promise.reject(response.data.message)
     }
 }, error => {
+    console.log(error)
     if (error.response.data) {
-        error.message = error.response.data.msg
+        error.message = error.response.data.message
     }
 
-    if (error.response.status === 401) {
-        router.push('/login').then(r => {
-
-        })
+    if (error.response.statusCode === 401) {
+        router.push('/login')
     }
-    Element.Message.error(error.message)
+    Element.Message.error(error.massage, {duration: 5000})
     return Promise.reject(error)
 })
 

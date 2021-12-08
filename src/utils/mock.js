@@ -14,7 +14,7 @@ let result = {
 * type:get
 * return:生成一段随机的 Base64 图片编码。
 * */
-Mock.mock('/checkCode', 'get', () => {
+Mock.mock('/captcha', 'get', () => {
     result.data = {
         token: Random.string(32),
         codeImage: Random.dataImage('120x40', '12345')
@@ -105,7 +105,7 @@ Mock.mock('/system/sideNavigation', 'get', () => {
             icon: "el-icon-truck",
             children: [
                 {
-                    title: "产品管理",
+                    title: "产品列表",
                     name: "products",
                     icon: "el-icon-burger",
                     path: "/main/products",
@@ -114,19 +114,19 @@ Mock.mock('/system/sideNavigation', 'get', () => {
             ]
         },
         {
-            title: "物流管理",
+            title: "订单管理",
             name: 'logistics',
-            icon: "el-icon-map-location",
+            icon: "el-icon-s-order",
             children: [
                 {
                     title: "我要去下单",
                     name: "placeOrder",
-                    icon: "el-icon-shopping-cart-full",
+                    icon: "el-icon-eleme",
                     path: "/main/placeOrder",
                     component: "logistics/PlaceOrder",
                 },
                 {
-                    title: "订单管理",
+                    title: "订单列表",
                     name: "orders",
                     icon: "el-icon-shopping-cart-full",
                     path: "/main/orders",
