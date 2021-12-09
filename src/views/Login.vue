@@ -11,8 +11,8 @@
       </el-col>
       <el-col :xl="6" :lg="7">
         <el-form :model="loginForm" :rules="rules" ref="loginForm" label-width="100px">
-          <el-form-item label="用户名" prop="name">
-            <el-input v-model="loginForm.name" placeholder="请输入用户名"></el-input>
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="loginForm.username" placeholder="请输入用户名"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input v-model="loginForm.password" placeholder="请输入密码" show-password></el-input>
@@ -41,13 +41,13 @@ export default {
   data() {
     return {
       loginForm: {
-        name: '',
+        username: '',
         password: '',
         code: '',
         token: ''
       },
       rules: {
-        name: [
+        username: [
           {required: true, message: '请输入用户名', trigger: 'change'}
         ],
         password: [
@@ -67,7 +67,7 @@ export default {
         if (valid) {
           this.$axios.post('/login?' + qs.stringify(this.loginForm)).then(res => {
             console.log("登录提交了！", res)
-            const jwt = res.headers['Authorization']
+            const jwt = res.headers['authorization']
             console.log('JWT:', jwt)
             this.$store.commit('SET_TOKEN', jwt)
             this.$router.push('/main/index')
