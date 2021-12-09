@@ -32,9 +32,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String jwt = jwtUtils.generateToken(authentication.getName());
         response.setHeader(jwtUtils.getHeader(), jwt);
 
-        Results result = Results.successRes("??");
+        Results result = Results.successRes("");
 
-        outputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));
+        outputStream.write(JSONUtil.toJsonStr(result).getBytes("UTF-8"));
 
         outputStream.flush();
         outputStream.close();

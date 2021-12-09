@@ -15,6 +15,6 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
 aki:
   jwt:
-    header:Authorization
-    expire:604800
-    secret:kd78dada9d7a0sd102e970asc92psxff
+    header: Authorization
+    expire: 604800
+    secret: kd78dada9d7a0sd102e970asc92psxff

@@ -15,22 +15,23 @@ public class CrossDomainConfig implements WebMvcConfigurer {
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.addExposedHeader("*");
+        corsConfiguration.addExposedHeader("Authorization");
         return corsConfiguration;
     }
 
     @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource ubccSource = new UrlBasedCorsConfigurationSource();
-        ubccSource.registerCorsConfiguration("/**", builderConfig());
-        return new CorsFilter(ubccSource);
+        UrlBasedCorsConfigurationSource Source = new UrlBasedCorsConfigurationSource();
+        Source.registerCorsConfiguration("/**", builderConfig());
+        return new CorsFilter(Source);
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").
-                allowedOrigins("*").
-                allowedMethods("GET", "POST", "PUT", "DELETE").
+                allowedOrigins("*")
+//                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "PUT", "DELETE").
                 maxAge(3600);
 
 
