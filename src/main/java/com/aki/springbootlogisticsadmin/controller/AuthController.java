@@ -25,6 +25,9 @@ public class AuthController extends BaseController {
     @Autowired
     Producer producer;
 
+    @Autowired
+    SysUserService sysUserService;
+
     @GetMapping("/captcha")
     public Results captcha() throws IOException {
         String key = UUID.randomUUID().toString();
@@ -54,12 +57,11 @@ public class AuthController extends BaseController {
      * 获取用户信息接口
      *
      * @param principal
-     * @return
      */
     @GetMapping("/main/userInfo")
     public Results userInfo(Principal principal) {
 
-        SysUser sysUser = SysUserService.getByUsername(principal.getName());
+        SysUser sysUser = sysUserService.getByUsername(principal.getName());
 
         return Results.successRes(MapUtil.builder()
                 .put("id", sysUser.getId())

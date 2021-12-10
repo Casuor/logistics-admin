@@ -3,7 +3,6 @@ package com.aki.springbootlogisticsadmin.entity;
 import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 /**
  * <p>
  * 
