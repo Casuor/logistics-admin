@@ -41,10 +41,10 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
-        password: '',
-        code: '',
-        token: ''
+        username: 'admin',
+        password: 'admin',
+        code: 'abcde',
+        token: '111111'
       },
       rules: {
         username: [
