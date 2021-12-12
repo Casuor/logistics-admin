@@ -14,6 +14,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface SysUserService extends IService<SysUser> {
 
     SysUser getByUsername(String username);
+
     String getUserAuthorityInfo(Long userId);
+
+    void clearUserAuthorityInfo(String name);
+
+    void clearUserAuthorityInfoById(Long roleId);
+
+    void clearUserAuthorityByMenuId(Long MenuId);
 
 }

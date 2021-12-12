@@ -29,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     JwtAccessDeniedHandler jwtAccessDeniedHandler;
     @Autowired
     UserDetailServiceImpl userDetailService;
+    @Autowired
+    JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
 
     @Bean
     JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
@@ -46,8 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/logout",
             "/captcha",
             "/favicon.ico",
-            "/test",
-            "/test/password"
+//            "/test",
+//            "/test/password"
     };
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -56,6 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailureHandler)
+                //退出配置
+                .and()
+                .logout()
+                .logoutSuccessHandler(jwtLogoutSuccessHandler)
                 //禁用SESSIONS
                 .and()
                 .sessionManagement()
