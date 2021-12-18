@@ -7,6 +7,8 @@ spring:
     url: jdbc:mysql://localhost:3306/dblogistics?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: root
     password:
+  main:
+    allow-circular-references: true
 #  security:
 #    user:
 #      name: admin  # 用户名

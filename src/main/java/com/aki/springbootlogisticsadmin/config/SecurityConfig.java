@@ -48,8 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/logout",
             "/captcha",
             "/favicon.ico",
-//            "/test",
-//            "/test/password"
     };
 
     protected void configure(HttpSecurity httpSecurity) throws Exception {

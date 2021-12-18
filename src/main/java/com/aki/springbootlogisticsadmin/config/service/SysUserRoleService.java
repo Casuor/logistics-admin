@@ -1,4 +1,4 @@
-package com.aki.springbootlogisticsadmin.service;
+package com.aki.springbootlogisticsadmin.config.service;
 
 import com.aki.springbootlogisticsadmin.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;

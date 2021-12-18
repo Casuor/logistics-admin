@@ -26,12 +26,13 @@ public class JwtLogoutSuccessHandler implements LogoutSuccessHandler {
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
+
         response.setContentType("application/json;charset=utf-8");
         ServletOutputStream outputStream = response.getOutputStream();
-//        String jwt = jwtUtils.generateToken(authentication.getName());
         response.setHeader(jwtUtils.getHeader(), "");
         Results results = Results.successRes("");
-        outputStream.write(JSONUtil.toJsonStr(results).getBytes(StandardCharsets.UTF_8));
+        outputStream.write(JSONUtil.toJsonStr(results).getBytes("UTF-8"));
+
         outputStream.flush();
         outputStream.close();
     }

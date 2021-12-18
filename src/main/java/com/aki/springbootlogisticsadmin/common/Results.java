@@ -27,9 +27,7 @@ public class Results implements Serializable {
         return failRes(400, message, null);
     }
 
-    public static Results failRes(String message, Object data) {
-        return failRes(400, message, data);
-    }
+
 
     public static Results failRes(int statusCode, String message, Object data) {
         Results res = new Results();

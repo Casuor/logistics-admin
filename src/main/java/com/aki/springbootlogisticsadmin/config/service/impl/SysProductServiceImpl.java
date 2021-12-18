@@ -1,8 +1,8 @@
-package com.aki.springbootlogisticsadmin.service.impl;
+package com.aki.springbootlogisticsadmin.config.service.impl;
 
 import com.aki.springbootlogisticsadmin.entity.SysProduct;
 import com.aki.springbootlogisticsadmin.mapper.SysProductMapper;
-import com.aki.springbootlogisticsadmin.service.SysProductService;
+import com.aki.springbootlogisticsadmin.config.service.SysProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

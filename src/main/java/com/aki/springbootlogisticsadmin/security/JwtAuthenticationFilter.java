@@ -2,7 +2,7 @@ package com.aki.springbootlogisticsadmin.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.aki.springbootlogisticsadmin.entity.SysUser;
-import com.aki.springbootlogisticsadmin.service.SysUserService;
+import com.aki.springbootlogisticsadmin.config.service.SysUserService;
 import com.aki.springbootlogisticsadmin.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -33,10 +32,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
         super(authenticationManager);
     }
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
-        super(authenticationManager, authenticationEntryPoint);
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String jwt = request.getHeader(jwtUtils.getHeader());
@@ -44,14 +39,15 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             chain.doFilter(request, response);
             return;
         }
-        Claims claims = jwtUtils.getClaimByToken(jwt);
-        if (claims == null) {
+        Claims claim = jwtUtils.getClaimByToken(jwt);
+        if (claim == null) {
             throw new JwtException("token异常");
         }
-        if (jwtUtils.isTokenExpired(claims)) {
+        if (jwtUtils.isTokenExpired(claim)) {
             throw new JwtException("token已过期");
         }
-        String username = claims.getSubject();
+        String username = claim.getSubject();
+        //获取用户权限等信息
         SysUser sysUser = sysUserService.getByUsername(username);
         UsernamePasswordAuthenticationToken authToken
                 = new UsernamePasswordAuthenticationToken(username, null, userDetailService.getUserAuthority(sysUser.getId()));

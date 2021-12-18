@@ -1,8 +1,8 @@
-package com.aki.springbootlogisticsadmin.service.impl;
+package com.aki.springbootlogisticsadmin.config.service.impl;
 
 import com.aki.springbootlogisticsadmin.entity.SysUserRole;
 import com.aki.springbootlogisticsadmin.mapper.SysUserRoleMapper;
-import com.aki.springbootlogisticsadmin.service.SysUserRoleService;
+import com.aki.springbootlogisticsadmin.config.service.SysUserRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

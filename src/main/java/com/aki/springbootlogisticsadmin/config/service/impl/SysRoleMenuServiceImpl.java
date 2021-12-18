@@ -1,8 +1,8 @@
-package com.aki.springbootlogisticsadmin.service.impl;
+package com.aki.springbootlogisticsadmin.config.service.impl;
 
 import com.aki.springbootlogisticsadmin.entity.SysRoleMenu;
 import com.aki.springbootlogisticsadmin.mapper.SysRoleMenuMapper;
-import com.aki.springbootlogisticsadmin.service.SysRoleMenuService;
+import com.aki.springbootlogisticsadmin.config.service.SysRoleMenuService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

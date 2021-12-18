@@ -1,0 +1,237 @@
+{
+  "statusCode": 200,
+  "message": "操作成功！",
+  "data": {
+    "authority": [
+      "ROLE_admin",
+      "sys:manage",
+      "sys:user:list",
+      "sys:role:list",
+      "sys:menu:list",
+      "sys:product",
+      "sys:product:list",
+      "sys:order",
+      "sys:order:order",
+      "sys:order:list",
+      "sys:order:history",
+      "sys:role:insert",
+      "sys:role:update",
+      "sys:role:delete",
+      "sys:role:premiss",
+      "sys:user:insert",
+      "sys:user:update",
+      "sys:user:delete",
+      "sys:user:role",
+      "sys:user:repass",
+      "sys:menu:insert",
+      "sys:menu:update",
+      "sys:menu:delete"
+    ],
+    "menus": [
+      {
+        "id": 1,
+        "name": "sys:manage",
+        "path": "",
+        "component": "",
+        "icon": "el-icon-s-operation",
+        "title": "系统管理",
+        "children": [
+          {
+            "id": 2,
+            "name": "sys:user:list",
+            "path": "/main/userInfo",
+            "component": "system/UserInfo",
+            "icon": "el-icon-user",
+            "title": "用户管理",
+            "children": [
+              {
+                "id": 15,
+                "name": "sys:user:insert",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "添加用户",
+                "children": []
+              },
+              {
+                "id": 16,
+                "name": "sys:user:update",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "修改用户",
+                "children": []
+              },
+              {
+                "id": 17,
+                "name": "sys:user:delete",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "删除用户",
+                "children": []
+              },
+              {
+                "id": 18,
+                "name": "sys:user:role",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "分配角色",
+                "children": []
+              },
+              {
+                "id": 19,
+                "name": "sys:user:repass",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "重置密码",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "name": "sys:role:list",
+            "path": "/main/roleInfo",
+            "component": "system/RoleInfo",
+            "icon": "el-icon-rank",
+            "title": "角色管理",
+            "children": [
+              {
+                "id": 11,
+                "name": "sys:role:insert",
+                "path": "",
+                "component": "",
+                "icon": "",
+                "title": "新增角色",
+                "children": []
+              },
+              {
+                "id": 12,
+                "name": "sys:role:update",
+                "path": "",
+                "component": "",
+                "icon": "",
+                "title": "修改角色",
+                "children": []
+              },
+              {
+                "id": 13,
+                "name": "sys:role:delete",
+                "path": "",
+                "component": "",
+                "icon": "",
+                "title": "删除角色",
+                "children": []
+              },
+              {
+                "id": 14,
+                "name": "sys:role:premiss",
+                "path": "",
+                "component": "",
+                "icon": "",
+                "title": "分配权限",
+                "children": []
+              }
+            ]
+          },
+          {
+            "id": 4,
+            "name": "sys:menu:list",
+            "path": "/main/menuInfo",
+            "component": "system/MenuInfo",
+            "icon": "el-icon-menu",
+            "title": "菜单管理",
+            "children": [
+              {
+                "id": 20,
+                "name": "sys:menu:insert",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "添加菜单",
+                "children": []
+              },
+              {
+                "id": 21,
+                "name": "sys:menu:update",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "修改菜单",
+                "children": []
+              },
+              {
+                "id": 22,
+                "name": "sys:menu:delete",
+                "path": null,
+                "component": null,
+                "icon": null,
+                "title": "删除菜单",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "name": "sys:product",
+        "path": "",
+        "component": "",
+        "icon": "el-icon-truck",
+        "title": "产品管理",
+        "children": [
+          {
+            "id": 6,
+            "name": "sys:product:list",
+            "path": "/main/products",
+            "component": "product/Products",
+            "icon": "el-icon-burger",
+            "title": "产品列表",
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "name": "sys:order",
+        "path": "",
+        "component": "",
+        "icon": "el-icon-s-order",
+        "title": "订单管理",
+        "children": [
+          {
+            "id": 8,
+            "name": "sys:order:order",
+            "path": "/main/placeOrder",
+            "component": "logistics/PlaceOrder",
+            "icon": "el-icon-eleme",
+            "title": "我要去下单",
+            "children": []
+          },
+          {
+            "id": 9,
+            "name": "sys:order:list",
+            "path": "/main/orders",
+            "component": "logistics/Orders",
+            "icon": "el-icon-shopping-cart-full",
+            "title": "订单列表",
+            "children": []
+          },
+          {
+            "id": 10,
+            "name": "sys:order:history",
+            "path": "/main/orderHistory",
+            "component": "logistics/OrderHistory",
+            "icon": "el-icon-position",
+            "title": "订单记录",
+            "children": []
+          }
+        ]
+      }
+    ]
+  }
+}

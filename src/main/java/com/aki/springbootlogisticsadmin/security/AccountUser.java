@@ -6,7 +6,7 @@ import org.springframework.util.Assert;
 
 import java.util.Collection;
 
-public class UserDetailImpl implements UserDetails {
+public class AccountUser implements UserDetails {
 
     private Long userId;
 
@@ -24,14 +24,14 @@ public class UserDetailImpl implements UserDetails {
 
     private final boolean enabled;
 
-    public UserDetailImpl(Long userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public AccountUser(Long userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this(userId, username, password, true, true, true, true, authorities);
     }
 
 
-    public UserDetailImpl(Long userId, String username, String password, boolean enabled, boolean accountNonExpired,
-                          boolean credentialsNonExpired, boolean accountNonLocked,
-                          Collection<? extends GrantedAuthority> authorities) {
+    public AccountUser(Long userId, String username, String password, boolean enabled, boolean accountNonExpired,
+                       boolean credentialsNonExpired, boolean accountNonLocked,
+                       Collection<? extends GrantedAuthority> authorities) {
         Assert.isTrue(username != null && !"".equals(username) && password != null,
                 "Cannot pass null or empty values to constructor");
         this.userId = userId;

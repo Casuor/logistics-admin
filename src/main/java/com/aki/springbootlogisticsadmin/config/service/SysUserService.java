@@ -1,4 +1,4 @@
-package com.aki.springbootlogisticsadmin.service;
+package com.aki.springbootlogisticsadmin.config.service;
 
 import com.aki.springbootlogisticsadmin.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -12,15 +12,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-12-07
  */
 public interface SysUserService extends IService<SysUser> {
-
     SysUser getByUsername(String username);
 
     String getUserAuthorityInfo(Long userId);
 
-    void clearUserAuthorityInfo(String name);
+    void clearUserAuthorityInfo(String username);
 
-    void clearUserAuthorityInfoById(Long roleId);
+    void clearUserAuthorityInfoByRoleId(Long roleId);
 
-    void clearUserAuthorityByMenuId(Long MenuId);
+    void clearUserAuthorityInfoByMenuId(Long menuId);
 
 }

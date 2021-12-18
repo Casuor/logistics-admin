@@ -1,8 +1,8 @@
-package com.aki.springbootlogisticsadmin.service.impl;
+package com.aki.springbootlogisticsadmin.config.service.impl;
 
 import com.aki.springbootlogisticsadmin.entity.SysOrder;
 import com.aki.springbootlogisticsadmin.mapper.SysOrderMapper;
-import com.aki.springbootlogisticsadmin.service.SysOrderService;
+import com.aki.springbootlogisticsadmin.config.service.SysOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

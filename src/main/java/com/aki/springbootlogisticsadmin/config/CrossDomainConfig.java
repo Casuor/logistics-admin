@@ -30,10 +30,7 @@ public class CrossDomainConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").
                 allowedOrigins("*")
-//                .allowCredentials(true)
                 .allowedMethods("GET", "POST", "PUT", "DELETE").
                 maxAge(3600);
-
-
     }
 }

@@ -5,7 +5,6 @@ import cn.hutool.core.map.MapUtil;
 import com.aki.springbootlogisticsadmin.common.Const;
 import com.aki.springbootlogisticsadmin.common.Results;
 import com.aki.springbootlogisticsadmin.entity.SysUser;
-import com.aki.springbootlogisticsadmin.service.SysUserService;
 import com.google.code.kaptcha.Producer;
 import sun.misc.BASE64Encoder;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +24,13 @@ public class AuthController extends BaseController {
     @Autowired
     Producer producer;
 
-    @Autowired
-    SysUserService sysUserService;
 
     @GetMapping("/captcha")
     public Results captcha() throws IOException {
         String key = UUID.randomUUID().toString();
         String code = producer.createText();
 
+        //测试数据
         key = "11111";
         code = "abcde";
 
@@ -46,6 +44,7 @@ public class AuthController extends BaseController {
         log.info("验证码 -- {} - {}", key, code);
         redisUtil.hset(Const.CAPTCHA_KEY, key, code, 120);
         return Results.successRes(
+                //key名称需要和前端的axios请求的字段是一致的
                 MapUtil.builder()
                         .put("token", key)
                         .put("codeImage", base64Image)
@@ -54,11 +53,12 @@ public class AuthController extends BaseController {
     }
 
     /**
+     * NavBar.vue
      * 获取用户信息接口
      *
      * @param principal
      */
-    @GetMapping("/main/userInfo")
+    @GetMapping("/sys/userInfo")
     public Results userInfo(Principal principal) {
 
         SysUser sysUser = sysUserService.getByUsername(principal.getName());
@@ -68,6 +68,7 @@ public class AuthController extends BaseController {
                 .put("username", sysUser.getUsername())
                 .put("avatar", sysUser.getAvatar())
                 .put("created", sysUser.getCreated())
+                .put("lastLogin", sysUser.getLastLogin())
                 .map()
         );
     }
