@@ -3,7 +3,9 @@
     <!--start button-->
     <el-form :inline="true">
       <el-form-item>
-        <el-button type="primary" @click="dialogFormVisible = true" icon="el-icon-circle-plus-outline">新增</el-button>
+        <el-button type="primary" @click="dialogFormVisible = true;selectStatus=false;dialogTitle='新增菜单'"
+                   icon="el-icon-circle-plus-outline">新增
+        </el-button>
       </el-form-item>
     </el-form>
     <!--end button-->
@@ -15,15 +17,16 @@
         row-key="id"
         border
         stripe
+        default-expand-all
         :header-cell-style="{background:'#f8f8f9',color:'#282a36'}"
         :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
       <el-table-column
           prop="name"
-          label="名称">
+          label="名称" width="200px">
       </el-table-column>
 
       <el-table-column
-          prop="authority"
+          prop="premiss"
           label="权限编码"
           width="180">
       </el-table-column>
@@ -44,7 +47,7 @@
       </el-table-column>
 
       <el-table-column
-          prop="url"
+          prop="path"
           label="Url" width="180">
       </el-table-column>
 
@@ -80,17 +83,17 @@
     </el-table>
     <!--    end table-->
 
-    <!--    start dialog-->
-    <el-dialog title="新增菜单" :visible.sync="dialogFormVisible" :before-close="handleClose">
-      <el-form :model="addForm" :rules="rules" ref="addForm" label-width="100px">
+    <!--    start insert and edit dialog-->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :before-close="handleClose">
+      <el-form :model="addForm" :rules="addFormRules" ref="addForm" label-width="100px">
+
         <el-form-item label="上级菜单" prop="parentId">
-          <el-select v-model="addForm.parentId" placeholder="请选择上级菜单">
+          <el-select v-model="addForm.parentId" placeholder="请选择上级菜单" :disabled="selectStatus">
             <template v-for="item in tableData">
-              <el-option :label="item.name" :value="item.id">
-              </el-option>
-              <template v-for="i in item.children">
-                <el-option :label="i.name" :value="i.id">
-                  <span>{{ '-' + ' ' + item.name }}</span>
+              <el-option :label="item.name" :value="item.id"></el-option>
+              <template v-for="child in item.children">
+                <el-option :label="child.name" :value="child.id">
+                  <span>{{ "- " + child.name }}</span>
                 </el-option>
               </template>
             </template>
@@ -101,16 +104,16 @@
           <el-input v-model="addForm.name"></el-input>
         </el-form-item>
 
-        <el-form-item label="权限编码" prop="authority">
-          <el-input v-model="addForm.authority"></el-input>
+        <el-form-item label="权限编码" prop="premiss">
+          <el-input v-model="addForm.premiss"></el-input>
         </el-form-item>
 
         <el-form-item label="图标" prop="icon">
           <el-input v-model="addForm.icon"></el-input>
         </el-form-item>
 
-        <el-form-item label="Url" prop="url">
-          <el-input v-model="addForm.url"></el-input>
+        <el-form-item label="Url" prop="path">
+          <el-input v-model="addForm.path"></el-input>
         </el-form-item>
 
         <el-form-item label="Component" prop="component">
@@ -120,31 +123,30 @@
 
         <el-form-item label="类型" prop="type">
           <el-radio-group v-model="addForm.type">
-            <el-radio label="目录"></el-radio>
-            <el-radio label="菜单"></el-radio>
-            <el-radio label="按钮"></el-radio>
+            <el-radio :label=0>目录</el-radio>
+            <el-radio :label=1>菜单</el-radio>
+            <el-radio :label=2>按钮</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="addForm.status">
-            <el-radio label="启用"></el-radio>
-            <el-radio label="禁用"></el-radio>
+            <el-radio :label=0>禁用</el-radio>
+            <el-radio :label=1>启用</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item label="排序" prop="sort">
-          <template>
-            <el-input-number v-model="sort" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
-          </template>
+          <el-input-number v-model="addForm.sort" @change="handleChange" :min="1" label="排序号"></el-input-number>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
       </div>
     </el-dialog>
-    <!--    end dialog-->
+    <!--    end insert and edit dialog-->
   </div>
 </template>
 
@@ -153,39 +155,29 @@ export default {
   name: "MenuInfo",
   data() {
     return {
-      sort: 1,
+      selectStatus: false,
+      dialogTitle: "",
       dialogFormVisible: false,
-      addForm: {
-        name: '',
-        authority: '',
-        icon: '',
-        url: '',
-        component: '',
-        type: [],
-        status: [],
-        sort: ''
-      },
-      formLabelWidth: '120px',
+      addForm: {},
       tableData: [],
-      rules: {
+      addFormRules: {
         parentId: [
           {required: true, message: '请选择上级菜单', trigger: 'blur'},
         ],
         name: [
           {required: true, message: '请输入菜单名称', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur'}
         ],
-        authority: [
-          {required: true, message: '请选择权限类型', trigger: 'change'}
+        premiss: [
+          {required: true, message: '请填写权限编码', trigger: 'blur'}
         ],
         type: [
-          {type: 'array', required: true, message: '请至少选择一个类型', trigger: 'change'}
+          {required: true, message: '请至少选择一个类型', trigger: 'blur'}
         ],
         status: [
-          {type: 'array', required: true, message: '请至少选择一个状态', trigger: 'change'}
+          {required: true, message: '请至少选择一个状态', trigger: 'blur'}
         ],
         sort: [
-          {required: true, message: '请填写活动形式', trigger: 'blur'}
+          {required: true, message: '请选择排序', trigger: 'blur'}
         ]
       },
     }
@@ -195,44 +187,46 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           //提交成功
-          this.$axios.post('/menuList/add' + (this.addForm.id ? 'edit' : 'add'), this.addForm).then(() => {
-            this.$message({
-              message: '添加成功！！！',
-              type: 'success',
-              onClose: () => {
-                //更新表中数据
-                this.initTables();
-              }
-            });
-          })
+          console.log("addForm:", this.addForm);
+          this.$axios.post('/sys/menu/' + (this.addForm.id ? 'update' : 'insert '), this.addForm)
+              .then(() => {
+                this.$message({
+                  message: '操作成功！！！',
+                  type: 'success',
+                  onClose: () => {
+                    //更新表中数据
+                    this.initTables();
+                  }
+                });
+              })
           //添加成功后隐藏dialogForm
           this.dialogFormVisible = false;
         } else {
           console.log('error submit!!');
+          this.$refs[formName].resetFields();
           return false;
         }
       });
     },
     handleClose(done) {
-      this.resetForm('editForm');
+      this.resetForm('addForm');
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.dialogFormVisible = false;
       this.addForm = {};
-    }
-    ,
+    },
     handleChange(value) {
       console.log(value);
     },
     confirmToDelete(id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该菜单, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         //发起del请求
-        this.$axios.post('/main/menuList/del' + id).then((res) => {
+        this.$axios.post('/sys/menu/delete/' + id).then((res) => {
           this.initTables();
         })
         this.$message({
@@ -247,16 +241,21 @@ export default {
       });
     },
     initTables() {
-      this.$axios.get('/main/menuList').then(res => {
+      this.$axios.get('/sys/menu/list').then(res => {
         this.tableData = res.data.data;
       })
     },
+    //编辑菜单
     editForm(id) {
-      this.$axios.get('/main/menuList/edit' + id).then(res => {
+      this.$axios.get('/sys/menu/info/' + id).then(res => {
         this.addForm = res.data.data;
+
+        if (res.data.data.parentId === 0) {
+          this.selectStatus = true
+        }
+        this.dialogTitle = "编辑菜单"
+        this.dialogFormVisible = true
       })
-      this.dialogFormVisible = true
-      // this.initTables();
     }
   },
   created() {

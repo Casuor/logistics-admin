@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
 
 
     } else if (token && !hasRoute) {
-        axios.get("/system/sideNavigation", {
+        axios.get("/sys/menu/sideMenu", {
             headers: {
                 Authorization: localStorage.getItem("token")
             }
@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
 
                         // 转成路由
                         let route = menuToRoute(e)
-                        // 吧路由添加到路由管理中
+                        // 路由添加到路由管理中
                         if (route) {
                             newRoutes[0].children.push(route)
                         }

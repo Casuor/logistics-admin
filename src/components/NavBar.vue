@@ -66,7 +66,9 @@ export default {
           {
             id: "",
             username: "",
-            avatar: ""
+            avatar: "",
+            created: "",
+            lastLogin: ""
           },
     };
   },
@@ -100,7 +102,8 @@ export default {
       }
     },
     getUserInfo() {
-      this.$axios.get('/main/userInfo').then(res => {
+      this.$axios.get('/sys/userInfo').then(res => {
+        console.log("NavBar:userInfo:", res.data.data)
         this.userInfo = res.data.data
       })
     }
