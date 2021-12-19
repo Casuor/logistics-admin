@@ -10,6 +10,7 @@ import com.aki.springbootlogisticsadmin.entity.SysRoleMenu;
 import com.aki.springbootlogisticsadmin.entity.SysUser;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -64,10 +65,11 @@ public class SysMenuController extends BaseController {
 
     //全局捕获实体类异常
     @PostMapping("/insert")
+    @Transactional
     @PreAuthorize("hasAuthority('sys:menu:insert')")
     public Results insert(@Validated @RequestBody SysMenu menu) {
         menu.setCreated(LocalDateTime.now());
-        System.out.println(menu);
+        menu.setStatus(Const.STATUS_ON);
         sysMenuService.save(menu);
         return Results.successRes(menu);
     }
