@@ -36,31 +36,43 @@
           type="selection">
       </el-table-column>
       <el-table-column
-          prop="roleName"
+          prop="name"
           label="角色名称">
       </el-table-column>
       <el-table-column
-          prop="roleId"
+          prop="code"
           label="权限编码">
       </el-table-column>
       <el-table-column
-          prop="roleDescription"
+          prop="remark"
           label="权限描述">
       </el-table-column>
       <el-table-column
-          prop="roleStatus"
+          prop="status"
           label="角色状态"
           show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-tooltip :content="'角色状态: ' +scope.row.roleStatus " placement="top">
+          <el-tooltip :content="'角色状态:'+'启用'" v-if="scope.row.status===1" placement="top">
             <el-switch
-                v-model="scope.row.roleStatus"
+                v-model="role_status_open"
                 active-color="#13ce66"
                 inactive-color="#ff4949"
+                @change="handleSwitch(role_status_open)"
                 active-value="启用"
-                inactive-value="关闭">
+                inactive-value="禁用">
             </el-switch>
           </el-tooltip>
+          <el-tooltip :content="'角色状态:'+'禁用'" v-if="scope.row.status===0" placement="top">
+            <el-switch
+                v-model="role_status_close"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="handleSwitch(role_status_close)"
+                active-value="启用"
+                inactive-value="禁用">
+            </el-switch>
+          </el-tooltip>
+
         </template>
       </el-table-column>
       <el-table-column
@@ -139,6 +151,8 @@ export default {
     return {
       dialogFormVisibleOfInsert: false,
       dialogFormVisibleOfPermission: false,
+      role_status_open: "启用",
+      role_status_close: "禁用",
       delStatus: true,
       currentPage: 1,
       pageSize: 20,
@@ -174,9 +188,12 @@ export default {
   },
   methods: {
     initTables() {
-      this.$axios.get('/system/roleInfo/init').then(res => {
-        console.log(res.data.data);
-        this.tableData = res.data.data;
+      this.$axios.get('/sys/role/list').then(res => {
+        let roleInfo = res.data.data.records
+        roleInfo.forEach(record => {
+          console.log("roleStatus:", record.status)
+        })
+        this.tableData = res.data.data.records;
       })
     },
     searchItem() {
@@ -261,6 +278,21 @@ export default {
     },
     handleClose() {
       this.resetForm('searchForm');
+    },
+    handleSwitch(value) {
+      //switch值改变
+      if (value === "启用") {
+        this.$message({
+          message: '启用成功！',
+          type: 'success'
+        });
+      }
+      if (value === "禁用") {
+        this.$message({
+          message: '禁用成功！',
+          type: 'success'
+        });
+      }
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);

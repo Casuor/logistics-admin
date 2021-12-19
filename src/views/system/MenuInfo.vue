@@ -251,6 +251,7 @@ export default {
         this.addForm = res.data.data;
 
         if (res.data.data.parentId === 0) {
+          console.log("parentId:",res.data.data.parentId);
           this.selectStatus = true
         }
         this.dialogTitle = "编辑菜单"
