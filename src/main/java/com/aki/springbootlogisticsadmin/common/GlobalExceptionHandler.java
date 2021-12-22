@@ -1,6 +1,7 @@
 package com.aki.springbootlogisticsadmin.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLNonTransientException;
 
 @Slf4j
 @RestControllerAdvice
@@ -35,5 +39,13 @@ public class GlobalExceptionHandler {
         ObjectError objectError = result.getAllErrors().stream().findFirst().get();
         log.error("+--------实体校验异常----------{}", objectError.getDefaultMessage());
         return Results.failRes(objectError.getDefaultMessage());
+    }
+
+    //SQL异常
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = DataAccessException.class)
+    public Results handler(SQLIntegrityConstraintViolationException e) {
+        log.error("+--------SQL异常----------{}", e.getMessage());
+        return Results.failRes(e.getMessage());
     }
 }

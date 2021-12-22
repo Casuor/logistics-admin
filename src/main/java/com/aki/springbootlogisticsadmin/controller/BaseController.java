@@ -29,12 +29,14 @@ public class BaseController {
     @Autowired
     SysRoleMenuService sysRoleMenuService;
 
+    @Autowired
+    SysProductService sysProductService;
     /**
      * 获取页面
      * @return
      */
     public Page getPage() {
-        int current = ServletRequestUtils.getIntParameter(request, "cuurent", 1);
+        int current = ServletRequestUtils.getIntParameter(request, "current", 1);
         int size = ServletRequestUtils.getIntParameter(request, "size", 10);
 
         return new Page(current, size);

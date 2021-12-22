@@ -1,8 +1,11 @@
 package com.aki.springbootlogisticsadmin.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -21,14 +24,13 @@ public class SysProduct extends BaseEntity {
     /**
      * 【产品名】
      */
-    @TableField("productName")
-    private String productname;
+    private String name;
 
     /**
      * 【产品类型】
      */
-    @TableField("productType")
-    private String producttype;
+    @TableField("pType")
+    private String ptype;
 
     /**
      * 【产品规格】
@@ -43,8 +45,7 @@ public class SysProduct extends BaseEntity {
     /**
      * 【产品状态】1、上架 0、下架
      */
-    @TableField("productStatus")
-    private Integer productstatus;
+    private Integer status;
 
 
 }

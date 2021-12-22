@@ -37,7 +37,7 @@ public class SysRoleController extends BaseController {
     public Results info(@PathVariable("id") Long id) {
         SysRole sysRole = sysRoleService.getById(id);
         //获取角色相关联的菜单ID
-        List<SysRoleMenu> roleMenus = sysRoleMenuService.list(new QueryWrapper<SysRoleMenu>().eq("rold_id", id));
+        List<SysRoleMenu> roleMenus = sysRoleMenuService.list(new QueryWrapper<SysRoleMenu>().eq("role_id", id));
         List<Long> menuIds = roleMenus.stream().map(p -> p.getMenuId()).collect(Collectors.toList());
         sysRole.setMenuIds(menuIds);
         return Results.successRes(sysRole);
@@ -55,11 +55,16 @@ public class SysRoleController extends BaseController {
 
     @PreAuthorize("hasAuthority('sys:role:insert')")
     @PostMapping("/insert")
+    @Transactional
     public Results insert(@Validated @RequestBody SysRole sysRole) {
-        sysRole.setCreated(LocalDateTime.now());
-        sysRole.setStatus(Const.STATUS_ON);
-        sysRoleService.save(sysRole);
-        return Results.successRes(sysRole);
+        try {
+            sysRole.setCreated(LocalDateTime.now());
+            sysRole.setStatus(Const.STATUS_ON);
+            sysRoleService.save(sysRole);
+            return Results.successRes(sysRole);
+        } catch (Exception e) {
+            return Results.failRes("此角色已存在，不能重复添加！");
+        }
     }
 
     @PostMapping("/delete")
