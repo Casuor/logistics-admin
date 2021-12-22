@@ -24,15 +24,14 @@ request.interceptors.response.use(response => {
         return Promise.reject(response.data.message)
     }
 }, error => {
-    console.log(error)
     if (error.response.data) {
         error.message = error.response.data.message
     }
 
-    if (error.response.statusCode === 401) {
+    if (error.response.data.statusCode === 401) {
         router.push('/login')
     }
-    Element.Message.error(error.massage, {duration: 5000})
+    Element.Message.error(error.response.data.message, {duration: 5000})
     return Promise.reject(error)
 })
 

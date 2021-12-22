@@ -142,7 +142,7 @@
 
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="submitForm('addForm')">提交</el-button>
       </div>
     </el-dialog>
@@ -187,7 +187,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           //提交成功
-          console.log("addForm:", this.addForm);
           this.$axios.post('/sys/menu/' + (this.addForm.id ? 'update' : 'insert '), this.addForm)
               .then(() => {
                 this.$message({
@@ -200,7 +199,8 @@ export default {
                 });
               })
           //添加成功后隐藏dialogForm
-          this.dialogFormVisible = false;
+          // this.dialogFormVisible = false;
+          this.handleClose();
         } else {
           console.log('error submit!!');
           this.$refs[formName].resetFields();
@@ -208,7 +208,7 @@ export default {
         }
       });
     },
-    handleClose(done) {
+    handleClose() {
       this.resetForm('addForm');
     },
     resetForm(formName) {
@@ -251,7 +251,7 @@ export default {
         this.addForm = res.data.data;
 
         if (res.data.data.parentId === 0) {
-          console.log("parentId:",res.data.data.parentId);
+          console.log("parentId:", res.data.data.parentId);
           this.selectStatus = true
         }
         this.dialogTitle = "编辑菜单"

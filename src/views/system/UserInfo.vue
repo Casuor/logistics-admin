@@ -1,19 +1,19 @@
 <template>
   <div>
     <!--start button-->
-    <el-form :inline="true" :model="editUserForm">
+    <el-form :inline="true" :model="searchForm">
       <el-form-item>
-        <el-input placeholder="请输入手机号码..." v-model="editUserForm.phoneNumber" clearable></el-input>
+        <el-input placeholder="请输入用户名称..." v-model="searchForm.username" clearable @clear="initUserInfo"></el-input>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" @click="searchUser(editUserForm.phoneNumber)">查找</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="initUserInfo(searchForm.username)">查找</el-button>
       </el-form-item>
 
       <el-form-item>
-        <el-select v-model="editUserForm.roleStatus" placeholder="用户状态" clearable
-                   @change="handleSelChange('editUserForm.roleStatus')">
-          <el-option v-for="item in userStatusOpt" :key="item.selItemVal" :label="item.label" :value="item.selItemVal">
+        <el-select v-model="searchForm.status" placeholder="用户状态" clearable
+                   @change="handleSelChange">
+          <el-option v-for="item in userStatusTree" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -21,14 +21,14 @@
       <el-divider direction="vertical"></el-divider>
       <el-form-item>
         <el-button type="primary"
-                   @click="dialogFormVisibleOfInsert = true"
-                   icon="el-icon-circle-plus-outline"
-                   v-if="hasPermission('system:userInfo:insert')">新增
+                   @click="dialogFormVisibleOfInsert = true;dialogTitle='新增用户';radioBtnStatus = true;editUserForm={};selectDisabled=false;"
+                   icon="el-icon-circle-plus-outline">新增
+          <!--          v-if="hasPermission('system:userInfo:insert')"-->
         </el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="danger" @click="delUser(selectRow)" icon="el-icon-delete"
-                   :disabled="this.selectRow.length === 0||this.delStatus">批量删除
+        <el-button type="danger" @click="deleteUser(searchForm.id)" icon="el-icon-delete"
+                   :disabled="delBtnStatus">批量删除
         </el-button>
       </el-form-item>
       <el-form-item>
@@ -49,178 +49,144 @@
         :border="true"
         v-loading="loading"
         :header-cell-style="{background:'#f8f8f9',color:'#282a36'}"
-        :default-sort="{prop: 'signDate', order: 'descending'}"
-        @selection-change="handleSelectionChange"
-        @row-click="handleCurrentChange">
+        :default-sort="{prop: 'created', order: 'ascending'}"
+        @selection-change="handleSelectionChange">
       <el-table-column
           type="selection">
       </el-table-column>
       <el-table-column
-          prop="userId"
+          prop="id"
           width="100"
           label="用户ID">
       </el-table-column>
       <el-table-column
-          prop="userName"
+          prop="username"
           width="150"
           label="用户名">
       </el-table-column>
       <el-table-column
-          prop="userRole"
+          prop=""
           width="150"
-          label="用户权限">
+          label="角色名称">
+        <template slot-scope="scope">
+          <el-tag v-for="item in scope.row.sysRoles">{{ item.name }}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column
-          prop="phoneNumber"
+          prop="phone"
           width="150"
           label="手机号码">
       </el-table-column>
       <el-table-column
-          prop="signDate"
-          width="150"
+          prop="created"
+          width="200"
           sortable
           label="创建时间">
       </el-table-column>
       <el-table-column
-          prop="userStatus"
+          prop="status"
           label="用户状态"
+          width="150"
           show-overflow-tooltip>
         <template slot-scope="scope">
-          <el-tooltip :content="'用户状态: ' +scope.row.userStatus " placement="top">
-            <el-switch
-                v-model="scope.row.userStatus"
-                active-color="#13ce66"
-                inactive-color="#ff4949"
-                :active-value="activeValue"
-                :inactive-value="inactiveValue">
-            </el-switch>
-          </el-tooltip>
+          <el-tag size="small" v-if="scope.row.status === 1" type="success">启用</el-tag>
+          <el-tag size="small" v-else-if="scope.row.status === 0" type="danger">禁用</el-tag>
         </template>
       </el-table-column>
       <el-table-column
           prop="operate"
           label="操作">
         <template slot-scope="scope">
-          <el-button type="text" @click="assignRole(scope.row.userId)">分配角色</el-button>
+          <el-button type="text" @click="assignRole(scope.row.id)">分配角色</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="resetPwd(scope.row.userId)">修改密码</el-button>
+          <el-button type="text" @click="resetPwd(scope.row.id,scope.row.username)">重置密码</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="editUserInfo(scope.row.userId)">编辑</el-button>
+          <el-button type="text" @click="editUserInfo(scope.row.id);radioBtnStatus=false;selectDisabled=true;">编辑
+          </el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="confirmToDelete(scope.row.userId)">删除</el-button>
+          <el-button type="text" @click="deleteUser(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!--    end table-->
+
+
     <!--    start Pagination-->
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
+        :current-page="current"
         :page-sizes="[10, 20, 30, 40, 50]"
-        :page-size="pageSize"
+        :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
         background
-        :total="totalPages">
+        :total="total">
     </el-pagination>
     <!--    END Pagination-->
 
-    <!--    start addForm dialog-->
-    <el-dialog title="新增用户" :visible.sync="dialogFormVisibleOfInsert">
-      <el-form :model="editUserForm" :rules="editUserFormRules" ref="resetPwdForm" label-width="100px">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="editUserForm.userName"></el-input>
+    <!--    start insert and edit form dialog-->
+    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisibleOfInsert">
+      <el-form :model="editUserForm" :rules="editUserFormRules" ref="editUserForm" label-width="100px">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="editUserForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="用户权限" prop="userRole">
-          <el-select v-model="selItemVal" placeholder="请选择角色">
+        <el-form-item>
+          <el-alert
+              title="初始密码为1207"
+              :closable="false"
+              type="info"
+              effect="dark"
+              style="line-height: 12px;"
+          ></el-alert>
+        </el-form-item>
+        <el-form-item label="用户权限" prop="role">
+          <el-select v-model="editUserForm.roleId" multiple placeholder="请选择角色" @change="selectRole"
+                     :disabled="selectDisabled">
             <el-option
-                v-for="item in roleInfo"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                v-for="item in roleTreeData"
+                :key="item.roleId"
+                :label="item.name"
+                :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="手机号码" prop="phoneNumber">
-          <el-input v-model="editUserForm.phoneNumber"></el-input>
+        <el-form-item label="手机号码" prop="phone">
+          <el-input v-model="editUserForm.phone"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="userStatus">
-          <el-radio-group v-model="editUserForm.userStatus">
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="editUserForm.status">
             <el-radio :label="1">启用</el-radio>
-            <el-radio :label="2">禁用</el-radio>
+            <el-radio :label="0" :disabled="radioBtnStatus">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
-      <!--    end addForm dialog-->
-
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleOfInsert = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('addForm')">确认</el-button>
+        <el-button type="primary" @click="submitForm('editUserForm')">确认</el-button>
       </div>
     </el-dialog>
-    <!--    end addForm dialog-->
+    <!--    end insert and edit form dialog-->
 
     <!--    start assignRole dialog-->
-    <el-dialog title="分配角色" :visible.sync="dialogFormVisibleOfRole">
-      <el-tree
-          :data="roleInfo"
-          show-checkbox
-          default-expand-all
-          node-key="id"
-          ref="roleInfo"
-          highlight-current>
-      </el-tree>
+    <el-dialog title="分配角色" :visible.sync="dialogFormVisibleOfRole" width="600px">
+      <el-form :model="assignRoleForm" ref="assignRoleForm">
+        <el-tree
+            :data="roleTreeData"
+            show-checkbox
+            default-expand-all
+            node-key="id"
+            ref="roleTreeDataTree"
+            highlight-current
+            :props="defaultProps"
+        >
+        </el-tree>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisibleOfRole = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm()">确认</el-button>
+        <el-button type="primary" @click="submitAssignRole('assignRoleForm')">确认</el-button>
       </div>
     </el-dialog>
     <!--    end assignRole dialog-->
-
-    <!--    start resetPwd dialog-->
-    <el-dialog title="修改密码" :visible.sync="dialogFormVisibleOfResetPwd">
-      <el-form :model="resetPwdForm" :rules="resetPwdFormRules" ref="resetPwdForm" label-width="100px">
-        <el-form-item label="密码" prop="pwd">
-          <el-input v-model="resetPwdForm.pwd"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="pwd">
-          <el-input v-model="resetPwdForm.confirmPwd"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisibleOfResetPwd = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('addForm')">确认</el-button>
-      </div>
-    </el-dialog>
-    <!--    end resetPwd dialog-->
-
-    <!--    start editUserForm dialog-->
-    <el-dialog title="编辑" :visible.sync="dialogFormVisibleOfEditForm">
-      <el-form :model="editUserForm" :rules="editUserFormRules" ref="resetPwdForm" label-width="100px">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="editUserForm.userName"></el-input>
-        </el-form-item>
-        <el-form-item label="用户权限" prop="userRole">
-          <el-select v-model="selItemVal" placeholder="请选择角色">
-            <el-option
-                v-for="item in roleInfo"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="手机号码" prop="phoneNumber">
-          <el-input v-model="editUserForm.phoneNumber"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisibleOfEditForm = false">取 消</el-button>
-        <el-button type="primary" @click="submitForm('addForm')">确认</el-button>
-      </div>
-    </el-dialog>
-    <!--    end editUserForm dialog-->
   </div>
 </template>
 
@@ -235,107 +201,209 @@ export default {
       dialogFormVisibleOfInsert: false,
       dialogFormVisibleOfRole: false,
       dialogFormVisibleOfResetPwd: false,
-      dialogFormVisibleOfEditForm: false,
+      selectDisabled: false,
       loading: false,
+      dialogTitle: '',
       activeValue: "启用",
       inactiveValue: "禁用",
+      radioBtnStatus: false,
+
+
       //start export excel
       downloadLoading: false,
       autoWidth: true,
       bookType: 'xlsx',
       filename: '用户数据',
       //end export excel
-      delStatus: true,
+
+
+      delBtnStatus: true,
       selItemVal: '',
-      selectRow: [],
-      currentPage: 1,
-      pageSize: 10,
-      totalPages: 200,
-      resetPwdForm: {
-        pwd: '123',
-        confirmPwd: '123'
+      multipleSelection: [],
+
+      current: 1,
+      size: 10,
+      total: 0,
+
+      searchForm: {},
+      assignRoleForm: {},
+
+      defaultProps: {
+        children: 'children',
+        label: 'name',
       },
-      userStatusOpt: [
+      roleTreeData: [],
+      userStatusTree: [
         {
-          selItemVal: 'normal',
-          label: '正常'
-        },
-        {
-          selItemVal: 'disable',
+          value: '1',
+          label: '启用'
+        }, {
+          value: '0',
           label: '禁用'
-        }
-      ],
-      roleInfo: [
-        {
-          id: 1,
-          selItemVal: 'admin',
-          label: '管理员'
         },
-        {
-          id: 2,
-          selItemVal: 'generalUser',
-          label: '普通用户'
-        }
       ],
       tableData: [],
       editUserForm: {
-        userName: '',
-        phoneNumber: '',
-        userRole: '',
-        userStatus: ''
+        roleId: ''
       },
       editUserFormRules: {
-        userName: [
-          {required: true, message: '请输入用户名，长度为 3 到 6 个字符', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度为 3 到 6 个字符', trigger: 'blur'}
+        username: [
+          {required: true, message: '请输入用户名', trigger: 'blur'},
         ],
-        phoneNumber: [
-          {required: true, message: '请输入用户名，长度为 3 到 6 个字符', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度为 3 到 6 个字符', trigger: 'blur'}
-        ]
-      },
-      resetPwdFormRules: {
-        pwd: [
-          {required: true, message: '请输入密码，长度为 3 到 6 个的数字', trigger: 'blur'},
-          {min: 3, max: 6, message: '长度为 3 到 6 个的数字', trigger: 'blur'}
-        ]
-      },
+        phone: [
+          {required: true, message: '请输入正确的手机号', trigger: 'blur'},
+        ],
+      }
     }
   },
+  created() {
+    this.initUserInfo()
+    this.$axios.get("/sys/role/list").then(res => {
+      this.roleTreeData = res.data.data.records
+    })
+  },
   methods: {
+    //初始化表格
     initUserInfo() {
-      this.$axios.get('/system/userInfo/init').then((res) => {
-        this.loading = true;
-        console.log(res.data.data);
-        this.tableData = res.data.data;
+      this.loading = true;
+      this.$axios.get('/sys/user/list', {
+        params: {
+          name: this.searchForm.username,
+          current: this.current,
+          size: this.size
+        }
+      }).then((res) => {
+        this.tableData = res.data.data.records;
+        this.size = res.data.data.size;
+        this.current = res.data.data.current;
+        this.total = res.data.data.total;
+        if (this.total === 0) {
+          this.$notify({
+            title: '提示',
+            dangerouslyUseHTMLString: true,
+            message: '<strong><i>查不到这个逼啊，亲！</i></strong>'
+          });
+          return;
+        }
         this.loading = false;
       })
     },
-    searchUser() {
-
-    },
-    delUser() {
-
-    },
-    assignRole() {
+    //分配角色
+    assignRole(id) {
       this.dialogFormVisibleOfRole = true
+      this.$axios.get('/sys/user/info/' + id).then(res => {
+        this.assignRoleForm = res.data.data
+        this.editUserForm.roleId = res.data.data.id
+        let roleIds = []
+        res.data.data.sysRoles.forEach(row => {
+          roleIds.push(row.id)
+        })
+        // console.log(roleIds)
+        this.$refs.roleTreeDataTree.setCheckedKeys(roleIds)
+      })
     },
-    resetPwd() {
-      this.dialogFormVisibleOfResetPwd = true
+    //提交分配角色请求
+    submitAssignRole(formName) {
+      if (formName === "assignRoleForm") {
+        let roleIds = this.$refs.roleTreeDataTree.getCheckedKeys()
+
+        console.log("roleIds:", this.assignRoleForm.id)
+
+        this.$axios.post('/sys/user/role/' + this.assignRoleForm.id, roleIds).then(res => {
+          this.$message({
+            showClose: true,
+            message: '操作成功！',
+            type: 'success',
+            onClose: () => {
+              this.initUserInfo()
+            }
+          });
+          this.dialogFormVisibleOfRole = false
+        })
+      }
+      if (formName === "editUserForm") {
+        let roleIds = this.editUserForm.roleId
+        console.log("editUserFormRoleIds: " + roleIds);
+        console.log("roleIds:", roleIds)
+        //拿不到当前新增用户id
+        this.$axios.post('/sys/user/role/' + this.editUserForm.id, roleIds)
+      }
     },
-    editUserInfo() {
-      this.dialogFormVisibleOfEditForm = true
+    selectRole(value) {
+      console.log("selectRole: " + value)
     },
-    confirmToDelete(id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    //重置密码
+    resetPwd(id, username) {
+      this.$confirm('将重置用户【' + username + '】的密码, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        //发起del请求
-        // this.$axios.post('/main/menuList/del' + id).then((res) => {
-        //   this.initTables();
-        // })
+        this.$axios.post('/sys/user/repass/' + id).then((res) => {
+        })
+        this.$message({
+          type: 'success',
+          message: '重置成功!'
+        });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        });
+      });
+    },
+    //编辑用户信息
+    editUserInfo(id) {
+      this.dialogTitle = "编辑用户"
+      this.$axios.get('/sys/user/info/' + id).then(res => {
+        this.editUserForm = res.data.data
+        console.log(this.editUserForm)
+        this.editUserForm.roleId = res.data.data.sysRoles;
+        this.dialogFormVisibleOfInsert = true
+      })
+    },
+    //根据用户状态筛选
+    handleSelChange(value) {
+      console.log("select:", value)
+      this.loading = true;
+      this.$axios.get('/sys/user/search', {
+        params: {
+          status: this.searchForm.status,
+          current: this.current,
+          size: this.size
+        }
+      }).then((res) => {
+        this.tableData = res.data.data.records;
+        this.size = res.data.data.size;
+        this.current = res.data.data.current;
+        this.total = res.data.data.total;
+        this.loading = false;
+      })
+    },
+    //多选multipleSelection删除
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+      this.delBtnStatus = val.length === 0;
+    },
+    //删除用户信息
+    deleteUser(id) {
+      this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let ids = []
+        if (id) {
+          ids.push(id)
+        } else {
+          this.multipleSelection.forEach(row => {
+            ids.push(row.id)
+          })
+        }
+        // 发起del请求
+        this.$axios.post('/sys/user/delete', ids).then((res) => {
+          this.initUserInfo();
+        })
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -347,50 +415,50 @@ export default {
         });
       });
     },
-    //根据用户状态筛选
-    handleSelChange(value) {
-      console.log("用户状态：", value);
-      if (value === "normal") {
-        console.log(this.tableData)
-        let selectNormal = []
-        this.tableData.forEach(el => {
-          console.log("执行了")
-          if (el.userStatus === "启用") {
-            selectNormal.push(el)
-          }
-          this.tableData = selectNormal
-        })
-      } else if (value === "disable") {
-        let selectDisable = []
-        this.tableData.forEach(el => {
-          console.log("执行了")
-          if (el.userStatus === "禁用") {
-            selectDisable.push(el)
-          }
-          this.tableData = selectDisable
-        })
-      }
+    //新增或编辑用户信息
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log('userForm:', this.editUserForm);
+          this.$axios.post('/sys/user/' + (this.editUserForm.id ? 'update' : 'insert'), this.editUserForm)
+              .then(res => {
+                this.editUserForm.id = res.data.data.id;
+                this.submitAssignRole(formName)
+                this.$message({
+                  showClose: true,
+                  message: '操作成功',
+                  type: 'success',
+                  onClose: () => {
+                    this.initUserInfo()
+                  }
+                });
+                this.dialogFormVisibleOfInsert = false
+              })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
-    handleSelectionChange(val) {
-      this.selectRow = val
-      console.log(this.selectRow);
-      val.forEach(element => {
-        console.log(element)
-      })
+    //分页：
+    //分页选择每页条数改变
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.size = val
+      this.initUserInfo()
     },
-    handleCurrentChange(rows) {
+    //处理当前页面改变
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.current = val
+      this.initUserInfo()
     },
-    submitForm() {
-
-    },
-    handleSizeChange() {
-
-    },
+    //数据导出
     handleDownload() {
       this.downloadLoading = true
       import('../../plugins/export_excel').then(excel => {
         const tHeader = ['Id', '用户名', '权限', '手机号', '创建日期', '用户状态']
-        const filterVal = ['userId', 'userName', 'userRole', 'phoneNumber', 'signDate', 'userStatus']
+        const filterVal = ['id', 'username', 'roleId', 'phone', 'created', 'status']
         const list = this.tableData
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
@@ -412,9 +480,6 @@ export default {
         }
       }))
     }
-  },
-  created() {
-    this.initUserInfo()
   }
 }
 </script>
