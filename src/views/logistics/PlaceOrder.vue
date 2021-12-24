@@ -3,49 +3,45 @@
     <el-aside width="49%">
       <el-card shadow="never" class="left-card">
         <i>我要下单</i>
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="orderForm" :model="orderForm" label-width="80px">
           <el-form-item label="招商平台">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="orderForm.platform" placeholder="请选择下单平台" @change="selectPlatform">
+              <el-option
+                  v-for="item in platformOptions"
+                  :label="item.label" :value="item.label"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="下单时间">
-            <el-col :span="11">
-              <el-date-picker type="datetime" placeholder="选择日期" v-model="form.date1" style="width: 100%;">
-              </el-date-picker>
-            </el-col>
-          </el-form-item>
           <el-form-item label="产品">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
+            <el-select v-model="orderForm.orderproductid" placeholder="请选择下单产品">
+              <el-option
+                  v-for="item in productOptions"
+                  :label="item.label" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="发货量">
-            <el-input-number v-model="num" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+            <el-input-number v-model="orderForm.orderquality" @change="" :min="1" :max="10"></el-input-number>
           </el-form-item>
           <el-form-item label="发货人">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="orderForm.sendername"></el-input>
           </el-form-item>
           <el-form-item label="发货人联系电话">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="orderForm.senderphone"></el-input>
           </el-form-item>
           <el-form-item label="收货人">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="orderForm.receivername"></el-input>
           </el-form-item>
           <el-form-item label="收货人联系电话">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="orderForm.receiverphone"></el-input>
           </el-form-item>
           <el-form-item label="收货人地址">
-            <el-input v-model="form.name"></el-input>
+            <el-input v-model="orderForm.receiveraddress"></el-input>
           </el-form-item>
           <el-form-item label="备注">
-            <el-input type="textarea" v-model="form.desc"></el-input>
+            <el-input type="textarea" v-model="orderForm.orderremark"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">立即创建</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="submitForm('orderForm')">立即创建</el-button>
+            <el-button>重置</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -102,17 +98,14 @@ export default {
     return {
       table: false,
       orderStatusVisible: false,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
+      orderForm: {},
+      gridData: [],
       reverse: true,
+      platformOptions: [{label: '平台一'}, {label: '平台二'}],
+      productOptions: [
+        {label: '香蕉', id: 101},
+        {label: '柚子', id: 202}
+      ],
       orderHistory: [{
         id: '1',
         name: '王大锤',
@@ -146,10 +139,37 @@ export default {
       ],
     }
   },
+  created() {
+    this.$axios.get('/sys/userInfo').then(res => {
+      console.log("NavBar:userInfo:", res.data.data)
+      this.orderForm.uid = res.data.data.id;
+    });
+  },
   methods: {
-    getOrders(id) {
-
-    }
+    //创建订单
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post('/sys/order/' + (this.orderForm.id ? 'update' : 'order'), this.orderForm)
+              .then(res => {
+                this.$message({
+                  showClose: true,
+                  message: '操作成功',
+                  type: 'success',
+                  onClose: () => {
+                    // this.initProduct()
+                  }
+                });
+              })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    selectPlatform(value) {
+      console.log("已选择：", value)
+    },
   }
 }
 </script>
