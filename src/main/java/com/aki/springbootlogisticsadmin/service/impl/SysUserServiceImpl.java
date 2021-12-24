@@ -1,12 +1,12 @@
-package com.aki.springbootlogisticsadmin.config.service.impl;
+package com.aki.springbootlogisticsadmin.service.impl;
 
 import com.aki.springbootlogisticsadmin.entity.SysMenu;
 import com.aki.springbootlogisticsadmin.entity.SysRole;
 import com.aki.springbootlogisticsadmin.entity.SysUser;
 import com.aki.springbootlogisticsadmin.mapper.SysUserMapper;
-import com.aki.springbootlogisticsadmin.config.service.SysMenuService;
-import com.aki.springbootlogisticsadmin.config.service.SysRoleService;
-import com.aki.springbootlogisticsadmin.config.service.SysUserService;
+import com.aki.springbootlogisticsadmin.service.SysMenuService;
+import com.aki.springbootlogisticsadmin.service.SysRoleService;
+import com.aki.springbootlogisticsadmin.service.SysUserService;
 import com.aki.springbootlogisticsadmin.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

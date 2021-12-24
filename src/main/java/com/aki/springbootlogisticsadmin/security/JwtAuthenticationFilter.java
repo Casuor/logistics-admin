@@ -2,7 +2,7 @@ package com.aki.springbootlogisticsadmin.security;
 
 import cn.hutool.core.util.StrUtil;
 import com.aki.springbootlogisticsadmin.entity.SysUser;
-import com.aki.springbootlogisticsadmin.config.service.SysUserService;
+import com.aki.springbootlogisticsadmin.service.SysUserService;
 import com.aki.springbootlogisticsadmin.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

@@ -1,7 +1,7 @@
 package com.aki.springbootlogisticsadmin.controller;
 
 import com.aki.springbootlogisticsadmin.common.Results;
-import com.aki.springbootlogisticsadmin.config.service.SysUserService;
+import com.aki.springbootlogisticsadmin.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,4 +1,4 @@
-package com.aki.springbootlogisticsadmin.config.service;
+package com.aki.springbootlogisticsadmin.service;
 
 import com.aki.springbootlogisticsadmin.common.SysMenuDto;
 import com.aki.springbootlogisticsadmin.entity.SysMenu;

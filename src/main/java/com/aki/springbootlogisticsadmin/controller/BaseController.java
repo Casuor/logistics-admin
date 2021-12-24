@@ -1,6 +1,6 @@
 package com.aki.springbootlogisticsadmin.controller;
 
-import com.aki.springbootlogisticsadmin.config.service.*;
+import com.aki.springbootlogisticsadmin.service.*;
 import com.aki.springbootlogisticsadmin.utils.RedisUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +31,13 @@ public class BaseController {
 
     @Autowired
     SysProductService sysProductService;
+
+    @Autowired
+    SysOrderService sysOrderService;
+
     /**
      * 获取页面
+     *
      * @return
      */
     public Page getPage() {

@@ -1,7 +1,7 @@
 package com.aki.springbootlogisticsadmin.security;
 
 import com.aki.springbootlogisticsadmin.entity.SysUser;
-import com.aki.springbootlogisticsadmin.config.service.SysUserService;
+import com.aki.springbootlogisticsadmin.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;

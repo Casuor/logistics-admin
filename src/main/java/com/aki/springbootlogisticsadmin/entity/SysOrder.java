@@ -1,10 +1,11 @@
 package com.aki.springbootlogisticsadmin.entity;
 
-import java.time.LocalDateTime;
-
+import com.aki.springbootlogisticsadmin.utils.PhoneNumberValidate;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p>
@@ -21,6 +22,13 @@ public class SysOrder extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 【下单人ID】
+     */
+//    @TableField(exist = false)
+    private Long uid;
+
+
+    /**
      * 【虚拟订单编号】
      */
     @TableField("virtualOrderNum")
@@ -35,19 +43,9 @@ public class SysOrder extends BaseEntity {
     /**
      * 【招商平台】
      */
+    @NotNull(message = "招商平台为必选项")
     private String platform;
 
-    /**
-     * 【招商下单时间】
-     */
-    @TableField("virtualOrderTime")
-    private LocalDateTime virtualordertime;
-
-    /**
-     * 【真实下单时间】
-     */
-    @TableField("realOrderTime")
-    private LocalDateTime realordertime;
 
     /**
      * 【招商下单状态】1、已处理 0、未处理
@@ -112,6 +110,7 @@ public class SysOrder extends BaseEntity {
     /**
      * 【发货人电话】
      */
+    @PhoneNumberValidate(message = "请输入正确的手机号")
     @TableField("senderPhone")
     private String senderphone;
 
@@ -124,6 +123,7 @@ public class SysOrder extends BaseEntity {
     /**
      * 【收货人电话】
      */
+    @PhoneNumberValidate(message = "请输入正确的手机号")
     @TableField("receiverPhone")
     private String receiverphone;
 
@@ -132,6 +132,4 @@ public class SysOrder extends BaseEntity {
      */
     @TableField("receiverAddress")
     private String receiveraddress;
-
-
 }
