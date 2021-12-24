@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,21 +43,50 @@ public class SysProductController extends BaseController {
         //查询功能
         Page<SysProduct> pageData = sysProductService.page(getPage(),
                 new QueryWrapper<SysProduct>()
-                        .like(StrUtil.isNotBlank(name), "productName", name));
+                        .like(StrUtil.isNotBlank(name), "name", name));
         return Results.successRes(pageData);
     }
 
     @PreAuthorize("hasAuthority('sys:product:list')")
+    @GetMapping("/search")
+    public Results search(String status) {
+        //查询功能
+        Page<SysProduct> pageData = sysProductService.page(getPage(), new QueryWrapper<SysProduct>().like(StrUtil.isNotBlank(status), "status", status));
+        return Results.successRes(pageData);
+    }
+
+    @PreAuthorize("hasAuthority('sys:product:insert')")
     @PostMapping("/insert")
     @Transactional
-    public Results insert(@Validated @RequestBody SysRole sysRole) {
+    public Results insert(@Validated @RequestBody SysProduct sysProduct) {
         try {
-            sysRole.setCreated(LocalDateTime.now());
-            sysRole.setStatus(Const.STATUS_ON);
-            sysRoleService.save(sysRole);
-            return Results.successRes(sysRole);
+            sysProduct.setCreated(LocalDateTime.now());
+            sysProduct.setStatus(Const.STATUS_ON);
+            sysProductService.save(sysProduct);
+            return Results.successRes(sysProduct);
         } catch (Exception e) {
-            return Results.failRes("此角色已存在，不能重复添加！");
+            return Results.failRes("此产品已存在，不能重复添加！");
+        }
+    }
+
+    @PreAuthorize("hasAuthority('sys:product:delete')")
+    @PostMapping("/delete/{id}")
+    @Transactional
+    public Results delete(@PathVariable(name = "id") Long[] ids) {
+        sysProductService.removeByIds(Arrays.asList(ids));
+        return Results.successRes("删除成功！");
+    }
+
+    @PreAuthorize("hasAuthority('sys:product:update')")
+    @PostMapping("/update")
+    @Transactional
+    public Results update(@Validated @RequestBody SysProduct sysProduct) {
+        try {
+            sysProduct.setUpdated(LocalDateTime.now());
+            sysProductService.updateById(sysProduct);
+            return Results.successRes(sysProduct);
+        } catch (Exception e) {
+            return Results.failRes("此产品信息已存在!");
         }
     }
 }

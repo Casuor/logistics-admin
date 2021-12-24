@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author aki
  * @since 2021-12-07
  */
 @RestController
-@RequestMapping("/sys-order")
+@RequestMapping("/sys/order")
 public class SysOrderController extends BaseController {
 
 }

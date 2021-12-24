@@ -100,6 +100,13 @@ INSERT INTO `sys_menu`
 VALUES ('21', '4', '修改菜单', null, 'sys:menu:update', null, '2', null, '2', '2021-01-17 21:56:12', null, '1');
 INSERT INTO `sys_menu`
 VALUES ('22', '4', '删除菜单', null, 'sys:menu:delete', null, '2', null, '3', '2021-01-17 21:56:36', null, '1');
+
+INSERT INTO `sys_menu`
+VALUES ('23', '6', '新增产品', '', 'sys:product:insert', null, '2', null, '1', '2021-01-15 23:02:25', '2021-01-17 21:53:14', '1');
+INSERT INTO `sys_menu`
+VALUES ('24', '6', '修改产品', '', 'sys:product:update', null, '2', null, '2', '2021-01-17 21:51:14', '2021-01-17 21:53:14', '1');
+INSERT INTO `sys_menu`
+VALUES ('25', '6', '删除产品', '', 'sys:product:delete', null, '2', null, '3', '2021-01-17 21:51:39', '2021-01-17 21:53:14', '1');
 # end btn
 
 
