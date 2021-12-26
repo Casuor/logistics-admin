@@ -65,10 +65,6 @@
           type="selection">
       </el-table-column>
       <el-table-column
-          prop="id"
-          label="产品ID">
-      </el-table-column>
-      <el-table-column
           prop="name"
           label="产品名称">
       </el-table-column>
@@ -208,9 +204,9 @@ export default {
   },
   methods: {
     initProduct() {
-      setTimeout(() => {
-        this.loading = true;
-      })
+
+      this.loading = true;
+
       this.$axios.get('/sys/product/list', {
         params: {
           name: this.searchForm.name,

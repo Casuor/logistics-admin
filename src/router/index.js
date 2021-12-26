@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
             }
         }).then(res => {
 
-            console.log("res", res.data.data)
+            console.log("res:::::::::::::::", res.data.data)
 
             // 拿到menuList
             store.commit("setMenuList", res.data.data.menus)

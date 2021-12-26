@@ -2,7 +2,7 @@
   <div class="login">
     <el-row type="flex" justify="center">
       <el-col :xl="6" :lg="7" style="margin-right: 10px">
-        <h2>华寿物流管理</h2>
+        <h2>aki物流管理</h2>
         <el-image :src="require('@/assets/login.svg')" style="height: 200px;width: 200px;"></el-image>
         <h5>作者：aki</h5>
       </el-col>

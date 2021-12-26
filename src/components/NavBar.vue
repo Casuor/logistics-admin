@@ -38,7 +38,7 @@
             <el-menu-item index="orderHistory">
               <i>
                 订单记录
-                <el-badge :value="99" class="item">
+                <el-badge :value="count" class="item">
                 </el-badge>
               </i>
             </el-menu-item>
@@ -57,19 +57,19 @@ export default {
   name: "NavBar",
   computed: {
     ...mapState({
-      isCollapse: (state) => state.collapse.isCollapse
+      isCollapse: (state) => state.collapse.isCollapse,
+      count: (state) => state.order.orderCount
     })
   },
   data() {
     return {
-      userInfo:
-          {
-            id: "",
-            username: "",
-            avatar: "",
-            created: "",
-            lastLogin: ""
-          },
+      userInfo: {
+        id: "",
+        username: "",
+        avatar: "",
+        created: "",
+        lastLogin: ""
+      },
     };
   },
   methods: {
@@ -93,6 +93,7 @@ export default {
       }
     },
     ...mapActions(['toggleSidebar']),
+
     toggle() {
       let flag = this.$store.state.collapse.isCollapse
       if (flag) {
@@ -105,12 +106,20 @@ export default {
       this.$axios.get('/sys/userInfo').then(res => {
         console.log("NavBar:userInfo:", res.data.data)
         this.userInfo = res.data.data
+        this.$store.commit("setUserInfo", res.data.data)
+      })
+    },
+    getOrderCount() {
+      this.$axios.get('/sys/order/count').then(res => {
+        this.$store.commit("setOrderCount", res.data.data.length)
+        this.count = res.data.data.length
       })
     }
   },
   created() {
     //初始化用户信息
     this.getUserInfo()
+    this.getOrderCount()
   }
 }
 </script>
