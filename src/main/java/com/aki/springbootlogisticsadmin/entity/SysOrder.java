@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -24,9 +26,13 @@ public class SysOrder extends BaseEntity {
     /**
      * 【下单人ID】
      */
-//    @TableField(exist = false)
     private Long uid;
 
+    /**
+     * 【真实下单时间】
+     */
+    @TableField("dealDate")
+    private String dealdate;
 
     /**
      * 【虚拟订单编号】
@@ -48,16 +54,10 @@ public class SysOrder extends BaseEntity {
 
 
     /**
-     * 【招商下单状态】1、已处理 0、未处理
+     * 【下单产品名称】
      */
-    @TableField("orderStatus")
-    private Long orderstatus;
-
-    /**
-     * 【下单产品-关联产品id】
-     */
-    @TableField("orderProductId")
-    private Long orderproductid;
+    @TableField("orderProduct")
+    private String orderproduct;
 
     /**
      * 【下单产品规格】
@@ -132,4 +132,7 @@ public class SysOrder extends BaseEntity {
      */
     @TableField("receiverAddress")
     private String receiveraddress;
+
+    @TableField(exist = false)
+    private List<SysOrder> ordsers = new ArrayList<SysOrder>();
 }

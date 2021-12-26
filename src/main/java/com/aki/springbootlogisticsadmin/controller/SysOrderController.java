@@ -6,14 +6,16 @@ import cn.hutool.core.util.StrUtil;
 import com.aki.springbootlogisticsadmin.common.Const;
 import com.aki.springbootlogisticsadmin.common.Results;
 import com.aki.springbootlogisticsadmin.entity.SysOrder;
+
+import com.aki.springbootlogisticsadmin.service.SysOrderService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -36,12 +38,9 @@ public class SysOrderController extends BaseController {
 
     @PreAuthorize("hasAuthority('sys:order:list')")
     @GetMapping("/list")
-    public Results list(String name) {
+    public Results list() {
         //查询功能
-        Page<SysOrder> pageData = sysOrderService.page(getPage(),
-                new QueryWrapper<SysOrder>()
-                        .like(StrUtil.isNotBlank(name), "name", name));
-        return Results.successRes(pageData);
+        return Results.successRes(sysOrderService.list());
     }
 
 
@@ -54,6 +53,24 @@ public class SysOrderController extends BaseController {
         String orderNum = UUID.randomUUID().toString();
         sysOrder.setVirtualordernum(orderNum);
         sysOrderService.save(sysOrder);
+        return Results.successRes(sysOrder);
+    }
+
+    @PostMapping("/update")
+    @Transactional
+    public Results update(@Validated @RequestBody SysOrder sysOrder) {
+        try {
+            sysOrder.setUpdated(LocalDateTime.now());
+            sysOrderService.updateById(sysOrder);
+            return Results.successRes(sysOrder);
+        } catch (Exception e) {
+            return Results.failRes("系统异常");
+        }
+    }
+
+    @GetMapping("/count")
+    public Results count() {
+        List<SysOrder> sysOrder = sysOrderService.list(new QueryWrapper<SysOrder>().eq("status", Const.STATUS_OFF));
         return Results.successRes(sysOrder);
     }
 }
