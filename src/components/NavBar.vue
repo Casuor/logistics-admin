@@ -37,7 +37,7 @@
             </el-menu-item>
             <el-menu-item index="orderHistory">
               <i>
-                订单记录
+                未处理订单
                 <el-badge :value="count" class="item">
                 </el-badge>
               </i>
@@ -51,25 +51,25 @@
 
 <script>
 import {mapState, mapActions} from 'vuex'
-import collapse from "@/store/modules/toggleSidebar";
 
 export default {
   name: "NavBar",
   computed: {
     ...mapState({
       isCollapse: (state) => state.collapse.isCollapse,
-      count: (state) => state.order.orderCount
-    })
+    }),
+    count: {
+      get() {
+        return this.$store.state.order.orderCount;
+      },
+      set(value) {
+        this.$store.state.order.orderCount = value;
+      }
+    }
   },
   data() {
     return {
-      userInfo: {
-        id: "",
-        username: "",
-        avatar: "",
-        created: "",
-        lastLogin: ""
-      },
+      userInfo: {}
     };
   },
   methods: {
@@ -104,9 +104,9 @@ export default {
     },
     getUserInfo() {
       this.$axios.get('/sys/userInfo').then(res => {
-        console.log("NavBar:userInfo:", res.data.data)
         this.userInfo = res.data.data
-        this.$store.commit("setUserInfo", res.data.data)
+        localStorage.setItem("id", res.data.data.id);
+        localStorage.setItem("username", res.data.data.username);
       })
     },
     getOrderCount() {

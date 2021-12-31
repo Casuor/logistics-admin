@@ -8,16 +8,16 @@
           <el-form-item label="招商平台" prop="platform">
             <el-select v-model="orderForm.platform" placeholder="请选择下单平台" @change="selectPlatform">
               <el-option
-                  v-for="item in platformOptions"
-                  :label="item.label" :value="item.label"></el-option>
+                  v-for="(item,index) in platformOptions"
+                  :label="item.label" :value="item.label" :key="index"></el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="产品" prop="orderproduct">
             <el-select v-model="orderForm.orderproduct" placeholder="请选择下单产品">
               <el-option
-                  v-for="item in productOptions"
-                  :label="item.name" :value="item.name"></el-option>
+                  v-for="(item,index) in productOptions" :label="item.name" :value="item.name" :key="index">
+              </el-option>
             </el-select>
           </el-form-item>
 
@@ -59,7 +59,12 @@
                             :timestamp="item.created">
             <el-card>
               <h4 style="color:#5c6e79;">订单号：{{ item.virtualordernum }}</h4>
-              <el-alert effect="dark" type="error" :closable="false">{{ user.username }} 在{{
+              <el-alert effect="dark" type="error" :closable="false" v-show="item.status===0">{{ userInfo.username }} 在{{
+                  item.created
+                }}下了一单
+                {{ item.orderquality }} 件 {{ item.orderproduct }}
+              </el-alert>
+              <el-alert effect="dark" type="success" :closable="false" v-show="item.status===1">{{ userInfo.username }} 在{{
                   item.created
                 }}下了一单
                 {{ item.orderquality }} 件 {{ item.orderproduct }}
@@ -99,6 +104,10 @@
             <el-tag size="small">{{ orderForm.orderremark }}</el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="收货人地址">{{ orderForm.receiveraddress }}</el-descriptions-item>
+          <el-descriptions-item label="订单状态">
+            <el-tag v-if="orderForm.status===1">已发货</el-tag>
+            <el-tag v-if="orderForm.status===0">未发货</el-tag>
+          </el-descriptions-item>
         </el-descriptions>
       </el-card>
 
@@ -108,7 +117,7 @@
           <el-form-item label="招商平台" prop="platform">
             <el-select v-model="orderForm.platform" placeholder="请选择下单平台" @change="selectPlatform">
               <el-option
-                  v-for="item in platformOptions"
+                  v-for="item in platformOptions" :key="item.label"
                   :label="item.label" :value="item.label"></el-option>
             </el-select>
           </el-form-item>
@@ -163,6 +172,8 @@
 </template>
 
 <script>
+import userInfo from "@/views/system/UserInfo";
+
 export default {
   name: "PlaceOrder",
   data() {
@@ -203,7 +214,7 @@ export default {
         ]
       },
       orderHistory: [],
-      user: {},
+      userInfo:{}
     }
   },
   created() {
@@ -211,8 +222,7 @@ export default {
     this.$axios.get('/sys/product/list').then(res => {
       this.productOptions = res.data.data.records;
     })
-    this.user = this.$store.state.order.userInfo
-    this.orderForm.uid = this.user.id;
+    this.userInfo.username = localStorage.getItem("username")
   },
   methods: {
     getOrderCount() {
@@ -223,13 +233,19 @@ export default {
     //初始化订单信息
     initOrderInfo() {
       this.loading = true;
-      this.$axios.get('/sys/order/list').then(res => {
+      this.$axios.get('/sys/order/list', {
+        params: {
+          uid: localStorage.getItem("id"),
+        }
+      }).then(res => {
         this.orderHistory = res.data.data;
-        console.log("order history:", res.data.data)
         this.loading = false
         if (res.data.data.length === 0) {
           this.show = false;
           this.hidden = true;
+        } else {
+          this.hidden = false;
+          this.show = true;
         }
       })
     },
@@ -237,6 +253,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.orderForm.uid = localStorage.getItem("id");
+          this.orderForm.username = localStorage.getItem("username");
           this.$axios.post('/sys/order/' + (this.orderForm.id ? 'update' : 'order'), this.orderForm)
               .then(res => {
                 this.asideHidden = true;

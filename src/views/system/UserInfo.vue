@@ -69,7 +69,7 @@
           width="150"
           label="角色名称">
         <template slot-scope="scope">
-          <el-tag v-for="item in scope.row.sysRoles">{{ item.name }}</el-tag>
+          <el-tag v-for="item in scope.row.sysRoles" :key="item.id">{{ item.name }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -260,6 +260,7 @@ export default {
     this.initUserInfo()
     this.$axios.get("/sys/role/list").then(res => {
       this.roleTreeData = res.data.data.records
+      console.log("角色树：", this.roleTreeData);
     })
   },
   methods: {
@@ -290,6 +291,13 @@ export default {
     },
     //分配角色
     assignRole(id) {
+      if (id === 1) {
+        this.$message({
+          message: '该用户是超级管理员，不可编辑！',
+          type: 'error'
+        });
+        return;
+      }
       this.dialogFormVisibleOfRole = true
       this.$axios.get('/sys/user/info/' + id).then(res => {
         this.assignRoleForm = res.data.data
@@ -323,10 +331,9 @@ export default {
       }
       if (formName === "editUserForm") {
         let roleIds = this.editUserForm.roleId
-        console.log("editUserFormRoleIds: " + roleIds);
-        console.log("roleIds:", roleIds)
+        console.log("roleIds 调式:", roleIds)
         //拿不到当前新增用户id
-        this.$axios.post('/sys/user/role/' + this.editUserForm.id, roleIds)
+        this.$axios.post('/sys/user/role/' + this.editUserForm.id, roleIds);
       }
     },
     selectRole(value) {
@@ -334,6 +341,13 @@ export default {
     },
     //重置密码
     resetPwd(id, username) {
+      if (id === 1) {
+        this.$message({
+          message: '该用户是超级管理员，不可编辑！',
+          type: 'error'
+        });
+        return;
+      }
       this.$confirm('将重置用户【' + username + '】的密码, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -354,11 +368,22 @@ export default {
     },
     //编辑用户信息
     editUserInfo(id) {
+      if (id === 1) {
+        this.$message({
+          message: '该用户是超级管理员，不可编辑！',
+          type: 'error'
+        });
+        return;
+      }
       this.dialogTitle = "编辑用户"
       this.$axios.get('/sys/user/info/' + id).then(res => {
         this.editUserForm = res.data.data
-        console.log(this.editUserForm)
-        this.editUserForm.roleId = res.data.data.sysRoles;
+        let roleIds = []
+        res.data.data.sysRoles.forEach(row => {
+          roleIds.push(row.id)
+        })
+        this.editUserForm.roleId = roleIds;
+        console.log("测试：", this.editUserForm.roleId)
         this.dialogFormVisibleOfInsert = true
       })
     },
@@ -387,6 +412,13 @@ export default {
     },
     //删除用户信息
     deleteUser(id) {
+      if (id === 1) {
+        this.$message({
+          message: '该用户是超级管理员，不可删除！',
+          type: 'error'
+        });
+        return;
+      }
       this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -419,7 +451,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log('userForm:', this.editUserForm);
+          console.log('userForm调试1:', this.editUserForm);
           this.$axios.post('/sys/user/' + (this.editUserForm.id ? 'update' : 'insert'), this.editUserForm)
               .then(res => {
                 this.editUserForm.id = res.data.data.id;

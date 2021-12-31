@@ -13,14 +13,14 @@
         :collapse="isCollapse"
         unique-opened
         router>
-      <el-submenu :index="menu.name" v-for="menu in side_menu" :key="menu.name">
+      <el-submenu :index="menu.name" v-for="menu in side_menu" :key="menu.id">
 
         <template slot="title">
           <i :class="menu.icon"></i>
           <span>{{ menu.title }}</span>
         </template>
 
-        <router-link :to="item.path" v-for="item in menu.children">
+        <router-link :to="item.path" v-for="item in menu.children" :key="item.id">
           <el-menu-item :index="item.name" @click="selectMenuItem(item)">
             <template slot="title">
               <i :class="item.icon"></i>
@@ -45,8 +45,6 @@ export default {
     }),
     side_menu: {
       get() {
-        let menus = this.$store.state.sideNavigation.menus;
-        console.log("Mock MenuList:", menus)
         return this.$store.state.sideNavigation.menus;
       }
     },
@@ -54,6 +52,7 @@ export default {
   methods: {
     ...mapActions(['toggleSidebar']),
     selectMenuItem(item) {
+      console.log(item)
       this.$store.commit("addTab", item)
     }
   }

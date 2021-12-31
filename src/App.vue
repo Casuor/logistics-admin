@@ -9,6 +9,7 @@ export default {
   name: 'app',
   watch: {
     $route(to, from) {
+      console.log("TO:",to)
       if (to.path === "/main/menuInfo" || to.path === "/main/userInfo" || to.path === "/main/roleInfo" || to.path === "/main/products" || to.path === "/main/placeOrder" || to.path === "/main/orders" || to.path === "orderHistory") {
         let title = to.meta.title
         let name = to.name

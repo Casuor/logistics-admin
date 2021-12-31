@@ -1,12 +1,8 @@
 const order = {
     state: {
-        userInfo: {},
         orderCount: 0,
     },
     mutations: {
-        setUserInfo(state, userInfo) {
-            state.userInfo = userInfo
-        },
         setOrderCount(state, count) {
             state.orderCount = count
         }

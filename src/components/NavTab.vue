@@ -59,6 +59,7 @@ export default {
       this.$router.push(activeName).catch(error => error)
     },
     tabRouter(target) {
+      console.log("targetName:", target)
       this.$router.push(target.name).catch(error => error)
     }
   }

@@ -4,7 +4,7 @@
     <el-form :inline="true">
       <el-form-item>
         <el-button type="primary" @click="dialogFormVisible = true;selectStatus=false;dialogTitle='新增菜单'"
-                   icon="el-icon-circle-plus-outline">新增
+                   icon="el-icon-circle-plus-outline" :disabled="true">新增
         </el-button>
       </el-form-item>
     </el-form>
@@ -75,9 +75,9 @@
           prop="operate"
           label="操作" width="200">
         <template slot-scope="scope">
-          <el-button type="text" @click="editForm(scope.row.id)">编辑</el-button>
+          <el-button type="text" @click="editForm(scope.row.id)" :disabled="true">编辑</el-button>
           <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="confirmToDelete(scope.row.id)">删除</el-button>
+          <el-button type="text" @click="confirmToDelete(scope.row.id)" :disabled="true">删除</el-button>
         </template>
       </el-table-column>
     </el-table>

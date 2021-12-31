@@ -208,6 +208,13 @@ export default {
     },
     //编菜单回显
     editFormHandler(id) {
+      if (id === 1) {
+        this.$message({
+          message: '该角色是超级管理员，不可编辑！',
+          type: 'error'
+        });
+        return;
+      }
       this.$axios.get('/sys/role/info/' + id).then(res => {
         console.log("role info: ", res.data.data);
         this.roleForm = res.data.data
@@ -242,6 +249,13 @@ export default {
     },
     //删除角色
     signalDelete(id) {
+      if (id === 1) {
+        this.$message({
+          message: '该角色是超级管理员，不可删除！',
+          type: 'error'
+        });
+        return;
+      }
       this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -281,6 +295,13 @@ export default {
     },
     //分配权限
     assignPermission(id) {
+      if (id === 1) {
+        this.$message({
+          message: '该角色是超级管理员，不可编辑！',
+          type: 'error'
+        });
+        return;
+      }
       this.dialogFormVisibleOfPermission = true;
       this.$axios.get("/sys/role/info/" + id).then(res => {
         console.log("permissionForm:", res.data.data);
@@ -290,9 +311,8 @@ export default {
     },
     //权限提交
     submitPermissionFormForm(formName) {
-      let menuIds = this.$refs.permissionDataTree.getCheckedKeys()
-
-      console.log(menuIds)
+      let menuIds = this.$refs.permissionDataTree.getCheckedKeys().concat(this.$refs.permissionDataTree.getHalfCheckedKeys())
+      console.log("menuIds:", menuIds)
 
       this.$axios.post('/sys/role/premiss/' + this.permissionForm.id, menuIds).then(res => {
         this.$message({

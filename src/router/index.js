@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Index from "@/views/Index";
-import axios from "axios";
+import axios from "@/plugins/axios";
 import store from '@/store/index'
 import Settings from "@/views/Settings";
 
@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        // name: 'Home',
+        name: 'Home',
         component: Home,
         children: [
             {
@@ -21,14 +21,14 @@ const routes = [
             },
             {
                 path: '/main/settings',
-                // name: 'Settings',
+                name: 'Settings',
                 component: Settings
             }
         ]
     },
     {
         path: '/login',
-        // name: 'Login',
+        name: 'Login',
         component: () => import('../views/Login')
     },
 ]
@@ -49,8 +49,6 @@ router.beforeEach((to, from, next) => {
 
     } else if (!token) {
         next({path: '/login'})
-
-
     } else if (token && !hasRoute) {
         axios.get("/sys/menu/sideMenu", {
             headers: {
@@ -58,7 +56,6 @@ router.beforeEach((to, from, next) => {
             }
         }).then(res => {
 
-            console.log("res:::::::::::::::", res.data.data)
 
             // 拿到menuList
             store.commit("setMenuList", res.data.data.menus)
@@ -66,7 +63,6 @@ router.beforeEach((to, from, next) => {
             // 拿到用户权限
             store.commit("setPermissionsList", res.data.data.authority)
 
-            console.log('store menus:', store.state.sideNavigation.menus)
 
             // 动态绑定路由
             let newRoutes = router.options.routes
@@ -85,8 +81,6 @@ router.beforeEach((to, from, next) => {
                 }
             })
 
-            console.log("newRoutes")
-            console.log(newRoutes)
             for (let i = 0; i < newRoutes.length; i++) {
                 let newRoute = newRoutes[i]
                 router.addRoute(newRoute)

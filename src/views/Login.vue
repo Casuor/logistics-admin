@@ -41,10 +41,10 @@ export default {
   data() {
     return {
       loginForm: {
-        username: 'admin',
-        password: 'admin',
-        code: 'abcde',
-        token: '111111'
+        username: '',
+        password: '',
+        code: '',
+        token: ''
       },
       rules: {
         username: [
@@ -70,7 +70,9 @@ export default {
             const jwt = res.headers['authorization']
             console.log('JWT:', jwt)
             this.$store.commit('SET_TOKEN', jwt)
+
             this.$router.push('/main/index')
+
           });
         } else {
           console.log('error submit!!');

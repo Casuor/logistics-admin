@@ -2,37 +2,65 @@
   <div>
     <el-card shadow="never">
       <i class="el-icon-search">筛选</i>
-      <el-form :inline="true" :model="formInline" width="10%">
-        <el-form-item label="订单编号：" prop="name">
-          <el-input></el-input>
+      <el-form :inline="true" :model="searchForm" width="10%">
+        <el-form-item label="订单编号：">
+          <el-input placeholder="请输入订单编号..."
+                    @clear="initOrderTable"
+                    v-model="searchForm.number"
+                    :tabindex="searchForm.tabindex"
+                    @focus="searchForm.tabindex ='1'"
+                    clearable></el-input>
         </el-form-item>
-        <el-form-item label="下单时间：" prop="name">
+        <el-form-item label="下单时间：">
           <el-date-picker
-              v-model="value1"
+              v-model="searchForm.date"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
-              end-placeholder="结束日期">
+              end-placeholder="结束日期"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+              @change="HandleDateSearch(searchForm.date)">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="订单状态：" prop="name">
-          <el-select v-model="form.region" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+          <el-select
+              v-model="searchForm.status"
+              placeholder="请选择订单状态"
+              @change="handleSelectChange"
+          >
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+            </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户姓名：" prop="name">
-          <el-input></el-input>
+        <el-form-item label="用户姓名：">
+          <el-input placeholder="请输入用户名称..."
+                    @clear="initOrderTable"
+                    v-model="searchForm.username"
+                    :tabindex="searchForm.tabindex"
+                    @focus="searchForm.tabindex ='2'"
+                    clearable></el-input>
         </el-form-item>
-        <el-form-item label="产品名称：" prop="name">
-          <el-input></el-input>
+        <el-form-item label="产品名称：">
+          <el-input placeholder="请输入产品名称..."
+                    @clear="initOrderTable"
+                    v-model="searchForm.product"
+                    :tabindex="searchForm.tabindex"
+                    @focus="searchForm.tabindex ='3'"
+                    clearable></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button plain>重置
+          <el-button plain @click="searchForm={};initOrderTable();">重置
           </el-button>
         </el-form-item>
         <el-form-item>
-          <el-button plain>搜索
+          <el-button plain
+                     @click="HandleSearch(searchForm.number,searchForm.username,searchForm.product,searchForm.tabindex)">
+            搜索
           </el-button>
         </el-form-item>
         <el-form-item>
@@ -53,6 +81,7 @@
         ref="multipleTable"
         :data="tableData"
         tooltip-effect="dark"
+        :loading="loading"
         style="width: 100%"
         stripe
         :border="true"
@@ -64,66 +93,67 @@
           type="selection">
       </el-table-column>
       <el-table-column
-          prop="userName"
-          width="150"
-          label="招商平台">
-      </el-table-column>
-      <el-table-column
-          prop="userRole"
-          width="150"
-          label="用户姓名">
-      </el-table-column>
-      <el-table-column
-          prop="phoneNumber"
-          width="150"
-          label="产品名称">
-      </el-table-column>
-      <el-table-column
-          prop="phoneNumber"
-          width="150"
-          label="产品数量">
-      </el-table-column>
-      <el-table-column
-          prop="phoneNumber"
-          width="150"
-          label="运费">
-      </el-table-column>
-      <el-table-column
-          prop="phoneNumber"
-          width="150"
-          label="发货平台">
-      </el-table-column>
-      <el-table-column
-          prop="signDate"
-          width="150"
+          prop="created"
+          fixed="left"
+          width="180"
           sortable
           label="订单创建时间">
       </el-table-column>
       <el-table-column
-          prop="signDate"
+          prop="username"
           width="150"
-          sortable
-          label="下单时间">
+          label="用户姓名">
       </el-table-column>
       <el-table-column
-          prop="signDate"
+          prop="platform"
           width="150"
-          sortable
-          label="订单编号">
+          label="招商平台">
       </el-table-column>
       <el-table-column
-          prop="operate"
-          fixed="right"
-          label="操作">
+          prop="orderproduct"
+          width="150"
+          label="下单产品">
+      </el-table-column>
+      <el-table-column
+          prop="orderprice"
+          width="150"
+          label="订单总价">
+      </el-table-column>
+      <el-table-column
+          prop="logplatform"
+          width="150"
+          label="发货平台">
+      </el-table-column>
+      <el-table-column
+          prop="orderfare"
+          width="150"
+          label="物流费用">
+      </el-table-column>
+      <el-table-column
+          prop="logstatus"
+          width="150"
+          label="物流状态">
+      </el-table-column>
+      <el-table-column
+          prop="orderhandler"
+          width="150"
+          label="订单处理人">
+      </el-table-column>
+      <el-table-column
+          prop="status"
+          sortable
+          label="订单状态">
         <template slot-scope="scope">
-          <el-button type="text" @click="assignRole(scope.row.userId)">分配角色</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="resetPwd(scope.row.userId)">修改密码</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="editUserInfo(scope.row.userId)">编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-button type="text" @click="confirmToDelete(scope.row.userId)">删除</el-button>
+          <el-tag size="small" v-if="scope.row.status === 1" type="success">已处理</el-tag>
+          <el-tag size="small" v-else-if="scope.row.status === 0" type="danger">未处理</el-tag>
         </template>
+      </el-table-column>
+      <el-table-column
+          prop="dealdate"
+          fixed="right"
+          sortable
+          width="180"
+          label="订单处理时间">
       </el-table-column>
     </el-table>
     <!--    end table-->
@@ -132,12 +162,12 @@
     <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
+        :current-page="current"
         :page-sizes="[10, 20, 30, 40, 50]"
-        :page-size="pageSize"
+        :page-size="size"
         layout="total, sizes, prev, pager, next, jumper"
         background
-        :total="totalPages">
+        :total="total">
     </el-pagination>
     <!--    END Pagination-->
   </div>
@@ -151,58 +181,116 @@ export default {
   name: "Orders",
   data() {
     return {
+      tableData: [],
+      loading: false,
+      size: 10,
+      total: 0,
+      current: 1,
       //start export excel
       downloadLoading: false,
       autoWidth: true,
       bookType: 'xlsx',
       filename: '用户数据',
       //end export excel
-      formInline: {
-        user: '',
-        region: ''
-      },
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
-      pickerOptions: {
-        shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        }, {
-          text: '最近三个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-            picker.$emit('pick', [start, end]);
-          }
-        }]
-      },
-      value1: '',
-      value2: ''
+      searchForm: {},
+      options: [
+        {
+          value: '1',
+          label: '已处理'
+        },
+        {
+          value: '0',
+          label: '未处理'
+        }],
     };
   },
+  created() {
+    this.initOrderTable()
+  },
   methods: {
+    initOrderTable() {
+      this.loading = true;
+      this.$axios.get('/sys/order/init', {
+        params: {
+          username: this.searchForm.username,
+          number: this.searchForm.number,
+          product: this.searchForm.product,
+          status: this.searchForm.status,
+          current: this.current,
+          size: this.size
+        }
+      }).then(res => {
+        this.tableData = res.data.data.records;
+        this.size = res.data.data.size;
+        this.current = res.data.data.current;
+        this.total = res.data.data.total;
+        this.loading = false;
+      })
+    },
+    //分页选择每页条数改变
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.size = val
+      this.initOrderTable()
+    },
+    //处理当前页面改变
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.current = val
+      this.initOrderTable()
+    },
+    //table row选择
+    handleSelectionChange(value) {
+      console.log("选择了：", value)
+    },
+    HandleSearch(number, name, product, index) {
+      console.log(number, name, product, index)
+      if (index === "1") {
+        this.initOrderTable(number)
+      }
+      if (index === "2") {
+        this.initOrderTable(name)
+      }
+      if (index === "3") {
+        this.initOrderTable(product)
+      }
+    },
+    HandleDateSearch(val) {
+      let start = val[0];
+      let end = val[1];
+      this.loading = true;
+      this.$axios.get('/sys/order/interval', {
+        params: {
+          start: start,
+          end: end,
+          current: this.current,
+          size: this.size
+        }
+      }).then(res => {
+        this.tableData = res.data.data.records;
+        this.size = res.data.data.size;
+        this.current = res.data.data.current;
+        this.total = res.data.data.total;
+        this.loading = false;
+      })
+    },
+    handleSelectChange() {
+      this.loading = true;
+      this.$axios.get('/sys/order/status', {
+        params: {
+          status: this.searchForm.status,
+          current: this.current,
+          size: this.size
+        }
+      }).then(res => {
+        this.tableData = res.data.data.records;
+        this.size = res.data.data.size;
+        this.current = res.data.data.current;
+        this.total = res.data.data.total;
+        this.loading = false;
+      })
+    },
+    //导出数据
     handleDownload() {
       this.downloadLoading = true
       import('../../plugins/export_excel').then(excel => {

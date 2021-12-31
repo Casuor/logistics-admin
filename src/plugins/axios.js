@@ -2,7 +2,7 @@ import axios from "axios";
 import Element from "element-ui";
 import router from "../router/index";
 
-axios.defaults.baseURL = "http://localhost:8090"
+axios.defaults.baseURL = "http://192.168.18.65:8090"
 const request = axios.create({
     timeout: 5000, headers: {
         'Content-type': "application/json;charset=utf-8"
