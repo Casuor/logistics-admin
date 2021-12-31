@@ -37,7 +37,7 @@ public class SysProductController extends BaseController {
         return Results.successRes(sysProduct);
     }
 
-    @PreAuthorize("hasAuthority('sys:product:list')")
+//    @PreAuthorize("hasAuthority('sys:product:list')")
     @GetMapping("/list")
     public Results list(String name) {
         //查询功能

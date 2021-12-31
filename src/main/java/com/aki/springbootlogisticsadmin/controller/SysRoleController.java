@@ -4,6 +4,7 @@ package com.aki.springbootlogisticsadmin.controller;
 import cn.hutool.core.util.StrUtil;
 import com.aki.springbootlogisticsadmin.common.Const;
 import com.aki.springbootlogisticsadmin.common.Results;
+import com.aki.springbootlogisticsadmin.entity.SysMenu;
 import com.aki.springbootlogisticsadmin.entity.SysRole;
 import com.aki.springbootlogisticsadmin.entity.SysRoleMenu;
 import com.aki.springbootlogisticsadmin.entity.SysUserRole;
@@ -85,11 +86,15 @@ public class SysRoleController extends BaseController {
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('sys:role:update')")
     public Results update(@Validated @RequestBody SysRole sysRole) {
-        sysRole.setUpdated(LocalDateTime.now());
-        sysRoleService.updateById(sysRole);
-        //更新缓存
-        sysUserService.clearUserAuthorityInfoByRoleId(sysRole.getId());
-        return Results.successRes(sysRole);
+        try {
+            sysRole.setUpdated(LocalDateTime.now());
+            sysRoleService.updateById(sysRole);
+            //更新缓存
+            sysUserService.clearUserAuthorityInfoByRoleId(sysRole.getId());
+            return Results.successRes(sysRole);
+        } catch (Exception e) {
+            return Results.successRes("");
+        }
     }
 
     @PostMapping("/premiss/{roleId}")
@@ -98,6 +103,7 @@ public class SysRoleController extends BaseController {
     public Results premiss(@PathVariable("roleId") Long roleId, @RequestBody Long[] menuIds) {
         List<SysRoleMenu> roleMenus = new ArrayList<>();
         Arrays.stream(menuIds).forEach(menuId -> {
+            //解决添加子菜单，不添加父级菜单
             SysRoleMenu sysRoleMenu = new SysRoleMenu();
             sysRoleMenu.setMenuId(menuId);
             sysRoleMenu.setRoleId(roleId);

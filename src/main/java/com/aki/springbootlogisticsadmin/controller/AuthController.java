@@ -31,8 +31,8 @@ public class AuthController extends BaseController {
         String code = producer.createText();
 
         //测试数据
-        key = "11111";
-        code = "abcde";
+        //key = "11111";
+        //code = "abcde";
 
         BufferedImage bufferedImage = producer.createImage(code);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

@@ -1,5 +1,5 @@
 server:
-#  address: 192.168.18.65
+  address: 192.168.18.65
   port: 8090
   # DataSource Config
 spring:

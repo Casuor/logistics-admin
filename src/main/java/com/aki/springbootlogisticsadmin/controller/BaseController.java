@@ -1,5 +1,6 @@
 package com.aki.springbootlogisticsadmin.controller;
 
+import com.aki.springbootlogisticsadmin.mapper.SysOrderMapper;
 import com.aki.springbootlogisticsadmin.service.*;
 import com.aki.springbootlogisticsadmin.utils.RedisUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 public class BaseController {
     @Autowired
@@ -34,6 +36,9 @@ public class BaseController {
 
     @Autowired
     SysOrderService sysOrderService;
+
+    @Autowired
+    SysOrderMapper sysOrderMapper;
 
     /**
      * 获取页面

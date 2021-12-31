@@ -54,7 +54,8 @@ public class SysUserController extends BaseController {
     @GetMapping("/list")
     public Results list(String name) {
         //查询功能
-        Page<SysUser> pageData = sysUserService.page(getPage(), new QueryWrapper<SysUser>().like(StrUtil.isNotBlank(name), "username", name));
+        Page<SysUser> pageData = sysUserService.page(getPage(),
+                new QueryWrapper<SysUser>().like(StrUtil.isNotBlank(name), "username", name));
         pageData.getRecords().forEach(u -> {
             u.setSysRoles(sysRoleService.listRolesByUserId(u.getId()));
         });
@@ -114,21 +115,24 @@ public class SysUserController extends BaseController {
     @Transactional
     @PreAuthorize("hasAuthority('sys:user:role')")
     public Results role(@PathVariable("userId") Long userId, @RequestBody Long[] roleIds) {
-
-        List<SysUserRole> userRoles = new ArrayList<>();
-        Arrays.stream(roleIds).forEach(roleId -> {
-            SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setRoleId(roleId);
-            sysUserRole.setUserId(userId);
-            userRoles.add(sysUserRole);
-        });
-        //删除原来的记录
-        sysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id", userId));
-        sysUserRoleService.saveBatch(userRoles);
-        //删除缓存
-        SysUser sysUser = sysUserService.getById(userId);
-        sysUserService.clearUserAuthorityInfo(sysUser.getUsername());
-        return Results.successRes(userId);
+        try {
+            List<SysUserRole> userRoles = new ArrayList<>();
+            Arrays.stream(roleIds).forEach(roleId -> {
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setRoleId(roleId);
+                sysUserRole.setUserId(userId);
+                userRoles.add(sysUserRole);
+            });
+            //删除原来的记录
+            sysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id", userId));
+            sysUserRoleService.saveBatch(userRoles);
+            //删除缓存
+            SysUser sysUser = sysUserService.getById(userId);
+            sysUserService.clearUserAuthorityInfo(sysUser.getUsername());
+            return Results.successRes("成功创建用户"+userId);
+        } catch (Exception e) {
+            return Results.successRes("");
+        }
     }
 
     @PostMapping("/repass/{userId}")

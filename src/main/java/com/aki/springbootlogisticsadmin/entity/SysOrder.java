@@ -2,10 +2,12 @@ package com.aki.springbootlogisticsadmin.entity;
 
 import com.aki.springbootlogisticsadmin.utils.PhoneNumberValidate;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +30,17 @@ public class SysOrder extends BaseEntity {
      */
     private Long uid;
 
+    /*
+    【下单人姓名】
+     */
+    private String username;
+
     /**
      * 【真实下单时间】
      */
     @TableField("dealDate")
-    private String dealdate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private LocalDateTime dealdate;
 
     /**
      * 【虚拟订单编号】
@@ -133,6 +141,4 @@ public class SysOrder extends BaseEntity {
     @TableField("receiverAddress")
     private String receiveraddress;
 
-    @TableField(exist = false)
-    private List<SysOrder> ordsers = new ArrayList<SysOrder>();
 }
