@@ -1,0 +1,599 @@
+{
+	"info": {
+		"_postman_id": "1075d128-f1ad-4d7a-bbec-e8dc06b253aa",
+		"name": "logistics",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.sendRequest(\"http://localhost:8090/captcha\", function (err, response) {\r",
+							"    console.log(response.json());\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/login?username=admin&password=admin&code=abcde&token=11111",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						},
+						{
+							"key": "password",
+							"value": "admin"
+						},
+						{
+							"key": "code",
+							"value": "abcde"
+						},
+						{
+							"key": "token",
+							"value": "11111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "captcha",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/captcha",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"captcha"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "test",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "testPwd",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/test/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"test",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/userInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"userInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "sideMenu",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/menu/sideMenu",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"menu",
+						"sideMenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initial menuList table",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/menu/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"menu",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editMenuForm 回显",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/menu/info/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"menu",
+						"info",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertMenu",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/menu/insert?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"menu",
+						"insert"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initial roleInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/role/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"role",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "roleInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/role/info/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"role",
+						"info",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initial userInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/user/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"user",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTU0ODYzOCwiZXhwIjoxNjQwMTUzNDM4fQ.SJnJFnw5CsoGkOqqvhlE_af7SjY_r6VN6RS5FDFdZdKdL4y2mqPQdPC4DPgSHZEXASE2HXW5QH2I_L4lT24CCw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/user/info/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"user",
+						"info",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search by userStatus",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTgzMTE5OSwiZXhwIjoxNjQwNDM1OTk5fQ.sq4As9njD5rsxtQKS32Ktmy4o5ed852QMJDBSh7E73gOciKRJjB-D9p_zqwkwBCJHCCIYFQWsbovBKpGt_1s-Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/user/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"user",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "productInfo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzOTgzMTE5OSwiZXhwIjoxNjQwNDM1OTk5fQ.sq4As9njD5rsxtQKS32Ktmy4o5ed852QMJDBSh7E73gOciKRJjB-D9p_zqwkwBCJHCCIYFQWsbovBKpGt_1s-Q",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/product/info/101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"product",
+						"info",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initial products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/product/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"product",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "initial order",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8090/sys/order/list",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"order",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order info",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8090/sys/order/info/28",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"order",
+						"info",
+						"28"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get un deal order",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/order/count",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"order",
+						"count"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "init order and orders",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/order/init",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"order",
+						"init"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search by date",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY0MDU3NDk4OCwiZXhwIjoxNjQxMTc5Nzg4fQ.YL-s11dWkXrWZiILpmkM2YDHr09sXKZTuQAhuZgxw0Mk5Le9Hx4Q8ui6IpP2vBOeLjhd8ulM9PoytNazfEsTbA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8090/sys/order/interval",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"sys",
+						"order",
+						"interval"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
