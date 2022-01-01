@@ -32,8 +32,8 @@
 
             </el-submenu>
 
-            <el-menu-item index="orders">
-              <i>订单管理</i>
+            <el-menu-item index="placeOrder">
+              <i>我要去下单</i>
             </el-menu-item>
             <el-menu-item index="orderHistory">
               <i>
@@ -84,9 +84,9 @@ export default {
           this.$store.commit("resetState")
           this.$router.push('/login')
         })
-      } else if (key === "orders") {
-        this.$router.push('/main/orders')
-        this.$store.commit("addTab", {title: '订单管理', name: 'orders', path: '/main/orders'})
+      } else if (key === "placeOrder") {
+        this.$router.push('/main/placeOrder')
+        this.$store.commit("addTab", {title: '我要去下单', name: 'orders', path: '/main/placeOrder'})
       } else if (key === "orderHistory") {
         this.$router.push('/main/orderHistory')
         this.$store.commit("addTab", {title: '订单记录', name: 'orderHistory', path: '/main/orderHistory'})
@@ -105,6 +105,7 @@ export default {
     getUserInfo() {
       this.$axios.get('/sys/userInfo').then(res => {
         this.userInfo = res.data.data
+        console.log("userInfo",res.data.data)
         localStorage.setItem("id", res.data.data.id);
         localStorage.setItem("username", res.data.data.username);
       })

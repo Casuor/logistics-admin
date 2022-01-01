@@ -46,6 +46,9 @@ export default {
     side_menu: {
       get() {
         return this.$store.state.sideNavigation.menus;
+      },
+      set(value) {
+        this.$store.state.sideNavigation.menus = value;
       }
     },
   },

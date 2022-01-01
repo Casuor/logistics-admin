@@ -15,7 +15,6 @@ export default {
       const mobsf = document.getElementById('mobsf');
       const deviceWidth = document.body.clientWidth;
       const deviceHeight = document.body.clientHeight;
-      mobsf.style.background="#ffffff";
       mobsf.style.width = (Number(deviceWidth) - 200) + 'px'; //数字是页面布局宽度差值
       mobsf.style.height = (Number(deviceHeight) - 131) + 'px'; //数字是页面布局高度差
     }
